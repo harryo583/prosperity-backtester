@@ -18,8 +18,24 @@ def parse_algorithm(algo_path: str) -> Any:
 def main() -> None:
     algo_path = "algorithms/algo.py"
     trader_module = parse_algorithm(algo_path)
-    trader = trader_module.Trader
-    pass
+    trader = trader_module.Trader() # trader instance
+    
+    for state in trading_states:
+        traderData = state.traderData
+        timestamp = state.timestamp
+        listings = state.listings
+        order_depths = state.order_depths
+        own_trades = state.own_trades
+        market_trades = state.market_trades
+        position = state.position
+        observations = state.observations
+        
+        result, conversions, traderData = trader.run(state)
+        
+        for product, orders_list in result.items():
+            print(product)
+            for order in orders_list:
+                pass
 
 if __name__ == "__main__":
     main()
