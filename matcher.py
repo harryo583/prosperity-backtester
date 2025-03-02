@@ -58,7 +58,7 @@ def match_buy_order(state: TradingState, order: Order, market_trades: Dict[Symbo
 
 def match_sell_order(state: TradingState, order: Order, market_trades: Dict[Symbol, List[Trade]]) -> List[Trade]:
     trades = []
-    remaining_quantity = order.quantity
+    remaining_quantity = abs(order.quantity) # sell order quantities are negative by convetion
     order_depth = state.order_depths.get(order.symbol)
     
     # First fill with order depth
