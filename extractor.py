@@ -7,6 +7,8 @@ PRINT_TRADING_STATES = True
 PRINT_ACTIVITY_LOGS = True
 PRINT_TRADE_HISTORY = True
 
+round_number = 0
+
 ########################################################################
 # Parse Data
 ########################################################################
@@ -36,7 +38,7 @@ trade_history_lines = []
 activities_header = None
 current_section = None
 
-with open('market_data/logs.log', 'r') as f:
+with open(f"data/round-{round_number}/logs.log", 'r') as f:
     for line in f:
         line_strip = line.strip()
         if not line_strip:
