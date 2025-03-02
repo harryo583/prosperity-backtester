@@ -4,8 +4,9 @@ import pandas as pd
 from typing import List, Dict
 from datamodel import TradingState, Order, Symbol, Trade
 
-def match_buy_order(state: TradingState, order: Order, market_trades: Dict[Symbol, List[Trade]]) -> List[Trade]:
+def match_buy_order(state: TradingState, order: Order) -> List[Trade]:
     trades = []
+    market_trades = state.market_trades
     remaining_quantity = order.quantity
     order_depth = state.order_depths.get(order.symbol)
     
@@ -56,8 +57,9 @@ def match_buy_order(state: TradingState, order: Order, market_trades: Dict[Symbo
                 remaining_quantity -= matched_quantity
     return trades
 
-def match_sell_order(state: TradingState, order: Order, market_trades: Dict[Symbol, List[Trade]]) -> List[Trade]:
+def match_sell_order(state: TradingState, order: Order) -> List[Trade]:
     trades = []
+    market_trades = state.market_trades
     remaining_quantity = abs(order.quantity) # sell order quantities are negative by convetion
     order_depth = state.order_depths.get(order.symbol)
     
