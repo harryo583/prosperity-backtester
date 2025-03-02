@@ -19,7 +19,7 @@ class Listing:
         self.product = product
         self.denomination = denomination
         
-                 
+
 class ConversionObservation:
 
     def __init__(self, bidPrice: float, askPrice: float, transportFees: float, exportTariff: float, importTariff: float, sugarPrice: float, sunlightIndex: float):
