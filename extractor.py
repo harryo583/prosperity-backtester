@@ -91,15 +91,15 @@ for entry in sandbox_json_objects:
                                     product=data["product"],
                                     denomination=data["denomination"])
 
-        # Build order_depths
+        # Build order_depths with proper type conversion for keys and values
         order_depths = {}
         for sym, orders in lambda_log.get("order_depths", {}).items():
             od = OrderDepth()
-            od.buy_orders = orders.get("buy_orders", {})
-            od.sell_orders = orders.get("sell_orders", {})
+            od.buy_orders = {int(k): int(v) for k, v in orders.get("buy_orders", {}).items()}
+            od.sell_orders = {int(k): int(v) for k, v in orders.get("sell_orders", {}).items()}
             order_depths[sym] = od
 
-        # Build market_trades (list of Trade objects)
+        # Build market_trades (list of Trade objects) with int conversions
         market_trades = {}
         for sym, trades in lambda_log.get("market_trades", {}).items():
             market_trades[sym] = []
@@ -110,9 +110,10 @@ for entry in sandbox_json_objects:
                           quantity=int(t["quantity"]),
                           buyer=t.get("buyer"),
                           seller=t.get("seller"),
-                          timestamp=t.get("timestamp", 0)))
+                          timestamp=int(t.get("timestamp", 0)))
+                )
 
-        # Build own_trades
+        # Build own_trades with proper int conversion
         own_trades = {}
         for sym, trades in lambda_log.get("own_trades", {}).items():
             own_trades[sym] = []
@@ -123,32 +124,37 @@ for entry in sandbox_json_objects:
                           quantity=int(t["quantity"]),
                           buyer=t.get("buyer"),
                           seller=t.get("seller"),
-                          timestamp=t.get("timestamp", 0)))
+                          timestamp=int(t.get("timestamp", 0)))
+                )
 
-        # Position is a dict
-        position = lambda_log.get("position", {})
+        # Position: Ensure that each position value is an int
+        position_raw = lambda_log.get("position", {})
+        position = {prod: int(val) for prod, val in position_raw.items()}
 
         # Build observations
         obs_data = lambda_log.get("observations", {})
-        plain_obs = obs_data.get("plainValueObservations", {})
+        plain_obs_raw = obs_data.get("plainValueObservations", {})
+        # Convert plain observations to ints
+        plain_obs = {prod: int(val) for prod, val in plain_obs_raw.items()}
         conv_obs_raw = obs_data.get("conversionObservations", {})
         conv_obs = {}
         for prod, details in conv_obs_raw.items():
             conv_obs[prod] = ConversionObservation(
-                bidPrice=details.get("bidPrice", 0.0),
-                askPrice=details.get("askPrice", 0.0),
-                transportFees=details.get("transportFees", 0.0),
-                exportTariff=details.get("exportTariff", 0.0),
-                importTariff=details.get("importTariff", 0.0),
-                sugarPrice=details.get("sugarPrice", 0.0),
-                sunlightIndex=details.get("sunlightIndex", 0.0))
+                bidPrice=float(details.get("bidPrice", 0.0)),
+                askPrice=float(details.get("askPrice", 0.0)),
+                transportFees=float(details.get("transportFees", 0.0)),
+                exportTariff=float(details.get("exportTariff", 0.0)),
+                importTariff=float(details.get("importTariff", 0.0)),
+                sugarPrice=float(details.get("sugarPrice", 0.0)),
+                sunlightIndex=float(details.get("sunlightIndex", 0.0))
+            )
         observations = Observation(plainValueObservations=plain_obs,
                                    conversionObservations=conv_obs)
 
-        # Create the TradingState object
+        # Create the TradingState object with types properly set
         state = TradingState(
-            traderData=lambda_log.get("traderData", ""),
-            timestamp=lambda_log.get("timestamp", 0),
+            traderData=str(lambda_log.get("traderData", "")),
+            timestamp=int(lambda_log.get("timestamp", 0)),
             listings=listings,
             order_depths=order_depths,
             own_trades=own_trades,

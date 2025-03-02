@@ -50,11 +50,13 @@ def main() -> None:
                 if order.quantity > 0: # buy order
                     trades_executed = match_buy_order(state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
+                    state.position.setdefault(product, 0)
                     state.position[product] += total_filled # update trader position
                     trader.pnl -= sum(trade.price * trade.quantity for trade in trades_executed) # update pnl
                 elif order.quantity < 0: # sell order
                     trades_executed = match_sell_order(state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
+                    state.position.setdefault(product, 0)
                     state.position[product] -= total_filled # update trader position
                     trader.pnl += sum(trade.price * trade.quantity for trade in trades_executed) # update pnl
                 
@@ -63,7 +65,7 @@ def main() -> None:
                 else:
                     print(f"[{timestamp}] No trades executed for order {order}.")
         
-        print(f"[{timestamp}] End of iteration: Positions: {trader.positions}, PnL: {trader.pnl}")
+        print(f"[{timestamp}] End of iteration: Positions: {state.position}, PnL: {trader.pnl}")
 
 
 if __name__ == "__main__":
