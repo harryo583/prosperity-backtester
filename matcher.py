@@ -1,4 +1,4 @@
-# matcher.py: order matching engine
+# matcher.py
 
 import pandas as pd
 from typing import List, Dict
@@ -6,6 +6,104 @@ from datamodel import TradingState, Order, Symbol, Trade
 
 def match_buy_order(state: TradingState, order: Order, market_trades: Dict[Symbol, List[Trade]]) -> List[Trade]:
     trades = []
+    remaining_quantity = order.quantity
+    order_depth = state.order_depths.get(order.symbol)
+    
+    # First fill with order depth
+    if order_depth and order_depth.sell_orders:
+        eligible_prices = sorted([price for price in order_depth.sell_orders.keys() if price <= order.price])
+        
+        for price in eligible_prices:
+            available = order_depth.sell_orders[price]
+            if available <= 0:
+                continue
+            matched_quantity = min(remaining_quantity, available)
+            trades.append(
+                Trade(
+                    symbol = order.symbol,
+                    price = price,
+                    quantity = matched_quantity,
+                    buyer = "SUBMISSION",
+                    seller = "",
+                    timestamp = state.timestamp
+                )
+            )
+            order_depth.sell_orders[price] -= matched_quantity
+            remaining_quantity -= matched_quantity
+            if remaining_quantity == 0:
+                return trades
+    
+    # Fill any remaining quantity with market trades
+    if remaining_quantity > 0 and order.symbol in market_trades:
+        for market_trade in market_trades[order.symbol]:
+            if remaining_quantity <= 0:
+                break
+            if market_trade.quantity <= 0:
+                continue
+            if order.price >= market_trade.price: # only match if you're willing to pay higher
+                matched_quantity = min(remaining_quantity, market_trade.quantity)
+                trades.append(
+                    Trade(
+                        symbol = order.symbol,
+                        price = order.price,
+                        quantity = matched_quantity,
+                        buyer = "SUBMISSION",
+                        seller = "",
+                        timestamp = state.timestamp
+                    )
+                )
+                market_trade.quantity -= matched_quantity
+                remaining_quantity -= matched_quantity
+    return trades
 
 def match_sell_order(state: TradingState, order: Order, market_trades: Dict[Symbol, List[Trade]]) -> List[Trade]:
     trades = []
+    remaining_quantity = order.quantity
+    order_depth = state.order_depths.get(order.symbol)
+    
+    # First fill with order depth
+    if order_depth and order_depth.buy_orders:
+        eligible_prices = sorted([price for price in order_depth.buy_orders.keys() if price >= order.price], reverse=True)
+        
+        for price in eligible_prices:
+            available = order_depth.buy_orders[price]
+            if available <= 0:
+                continue
+            matched_quantity = min(remaining_quantity, available)
+            trades.append(
+                Trade(
+                    symbol = order.symbol,
+                    price = price,
+                    quantity = matched_quantity,
+                    buyer = "",
+                    seller = "SUBMISSION",
+                    timestamp = state.timestamp
+                )
+            )
+            order_depth.buy_orders[price] -= matched_quantity
+            remaining_quantity -= matched_quantity
+            if remaining_quantity == 0:
+                return trades
+    
+    # Fill any remaining quantity with market trades
+    if remaining_quantity > 0 and order.symbol in market_trades:
+        for market_trade in market_trades[order.symbol]:
+            if remaining_quantity <= 0:
+                break
+            if market_trade.quantity <= 0:
+                continue
+            if order.price <= market_trade.price: # only match if you're willing to accept lower
+                matched_quantity = min(remaining_quantity, market_trade.quantity)
+                trades.append(
+                    Trade(
+                        symbol = order.symbol,
+                        price = order.price,
+                        quantity = matched_quantity,
+                        buyer = "",
+                        seller = "SUBMISSION",
+                        timestamp = state.timestamp
+                    )
+                )
+                market_trade.quantity -= matched_quantity
+                remaining_quantity -= matched_quantity
+    return trades
