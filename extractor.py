@@ -158,13 +158,6 @@ for entry in sandbox_json_objects:
         )
         trading_states.append(state)
 
-if PRINT_TRADING_STATES:
-    print("\n\n============================================================================================================\n")
-    print("Trading States\n")
-    for state in trading_states[:3]:
-        print(state.toJSON())
-        print()
-
 ########################################################################
 # Process Activity Logs
 ########################################################################
@@ -191,14 +184,6 @@ product_dfs = {
     for product in activities_df['product'].unique()
 }
 
-if PRINT_ACTIVITY_LOGS:
-    print("\n============================================================================================================\n")
-    print("Activity DataFrames")
-    for product, df in product_dfs.items():
-        print("\n------------------------------------------------------------------------------------------------------------\n")
-        print(f"{product}:\n")
-        print(df.head(10))
-
 ########################################################################
 # Process Trade History
 ########################################################################
@@ -222,10 +207,28 @@ if trade_history_lines:
     except json.JSONDecodeError as e:
         print("Error parsing trade history:", e)
 
-if PRINT_TRADE_HISTORY:
-    print("\n\n============================================================================================================\n")
-    print("Trade History DataFrames")
-    for symbol, df in trade_product_dfs.items():
-        print("\n------------------------------------------------------------------------------------------------------------\n")
-        print(f"{symbol}\n")
-        print(df.head(10), "\n")
+
+if __name__ == "__main__":
+    
+    if PRINT_TRADING_STATES:
+        print("\n\n============================================================================================================\n")
+        print("Trading States\n")
+        for state in trading_states[:3]:
+            print(state.toJSON())
+            print()
+            
+    if PRINT_ACTIVITY_LOGS:
+        print("\n============================================================================================================\n")
+        print("Activity DataFrames")
+        for product, df in product_dfs.items():
+            print("\n------------------------------------------------------------------------------------------------------------\n")
+            print(f"{product}:\n")
+            print(df.head(10))
+
+    if PRINT_TRADE_HISTORY:
+        print("\n\n============================================================================================================\n")
+        print("Trade History DataFrames")
+        for symbol, df in trade_product_dfs.items():
+            print("\n------------------------------------------------------------------------------------------------------------\n")
+            print(f"{symbol}\n")
+            print(df.head(10), "\n")
