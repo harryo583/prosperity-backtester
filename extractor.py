@@ -106,7 +106,7 @@ for entry in sandbox_json_objects:
         for sym, trades in lambda_log.get("market_trades", {}).items():
             market_trades[sym] = []
             for t in trades:
-                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100:
+                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100: # filter for past timestep's market trades
                     market_trades[sym].append(
                         Trade(symbol=t["symbol"],
                             price=int(t["price"]),
