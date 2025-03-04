@@ -14,19 +14,26 @@ POSITION_LIMITS = {
     "KELP": 100
 }
 
+VERBOSE = False
 
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
     if not algorithm_path.is_file():
-        raise ModuleNotFoundError(f"{algorithm_path} is not a file")
+        raise ModuleNotFoundError(f"{algorithm_path} is not a file.")
     
     sys.path.append(str(algorithm_path.parent))
     return import_module(algorithm_path.stem)
 
 
+def print_self_trade(trade):
+    if trade.seller == "SUBMISSION":
+        print(f"Sold {trade.quantity} {trade.symbol} at {trade.price}.")
+    elif trade.buyer == "SUBMISSION":
+        print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
+
 def plot_pnl_over_time(pnl_over_time):
     """
-    Plots the Profit and Loss (PnL) over time
+    Plots the PnL over time
     """
     if not pnl_over_time:
         print("No PnL data available to plot.")
@@ -42,7 +49,7 @@ def plot_pnl_over_time(pnl_over_time):
     plt.title("PnL Over Time")
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.savefig("pnl_over_time.png")  # saves the plot as a PNG file
+    plt.savefig("results/pnl_over_time.png")  # saves the plot as a PNG file
     plt.show()
 
 
@@ -101,11 +108,17 @@ def main() -> None:
                     })
                 
                 if trades_executed:
-                    print(f"[{timestamp}] Executed trades for order {order}: {trades_executed}")
-                else:
+                    if VERBOSE:
+                        print(f"[{timestamp}] Executed trades for order {order}: {trades_executed}")
+                    else:
+                        print(f"[{timestamp}]")
+                        for trade in trades_executed:
+                            print_self_trade(trade)
+                elif VERBOSE:
                     print(f"[{timestamp}] No trades executed for order {order}.")
         
-        print(f"[{timestamp}] End of iteration: Positions: {state.position}, PnL: {trader.pnl}\n")
+        print(f"Positions: {state.position}")
+        print(f"PNL: {trader.pnl}\n")
         
         # Record pnl over time for plotting
         pnl_over_time.append((timestamp, trader.pnl))
@@ -128,7 +141,8 @@ def main() -> None:
             bid_price_1, bid_vol_1 = bids[0] if len(bids) > 0 else ("", "")
             bid_price_2, bid_vol_2 = bids[1] if len(bids) > 1 else ("", "")
             bid_price_3, bid_vol_3 = bids[2] if len(bids) > 2 else ("", "")
-            # Unpack up to 3 asks.
+
+            # Unpack up to 3 asks
             ask_price_1, ask_vol_1 = asks[0] if len(asks) > 0 else ("", "")
             ask_price_2, ask_vol_2 = asks[1] if len(asks) > 1 else ("", "")
             ask_price_3, ask_vol_3 = asks[2] if len(asks) > 2 else ("", "")
@@ -168,11 +182,11 @@ def main() -> None:
         "mid_price", "profit_and_loss"
     ]]
     
-    market_conditions_df.to_csv("market_conditions.csv", sep=";", index=False)
+    market_conditions_df.to_csv("results/market_conditions.csv", sep=";", index=False)
     
     trade_history_df = pd.DataFrame(trade_history_list)
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
-    trade_history_df.to_csv("trade_history.csv", sep=";", index=False)
+    trade_history_df.to_csv("results/trade_history.csv", sep=";", index=False)
     
     print("Exported market_conditions.csv and trade_history.csv")
     
