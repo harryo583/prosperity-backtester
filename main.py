@@ -8,7 +8,7 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
 VERBOSE = False
-DISPLAY_LENGTH = None
+DISPLAY_LENGTH = 2
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
@@ -60,6 +60,7 @@ def main() -> None:
     trader_module = parse_algorithm(algo_path)
     
     trader = trader_module.Trader()  # trader instance
+    trader.cash = 0  # initial cash
     trader.pnl = 0  # initial pnl
     
     # Containers for exporting CSVs and tracking PnL
@@ -104,12 +105,12 @@ def main() -> None:
                     trades_executed = match_buy_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) + total_filled  # update trader position
-                    trader.pnl -= sum(trade.price * trade.quantity for trade in trades_executed)  # update pnl
+                    trader.cash -= sum(trade.price * trade.quantity for trade in trades_executed)  # update cash
                 elif order.quantity < 0:  # sell order
                     trades_executed = match_sell_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) - total_filled  # update trader position
-                    trader.pnl += sum(trade.price * trade.quantity for trade in trades_executed)  # update pnl
+                    trader.cash += sum(trade.price * trade.quantity for trade in trades_executed)  # update cash
                 
                 # Record each executed trade in trade_history_list
                 for trade in trades_executed:
@@ -132,9 +133,14 @@ def main() -> None:
                         for trade in trades_executed:
                             print_self_trade(trade)
         
-        
+        trader.pnl = trader.cash
+        for product, pos in position.items():
+            mid_price = (max(state.order_depths[product].buy_orders) + min(state.order_depths[product].sell_orders)) / 2
+            trader.pnl += pos * mid_price
+                    
         if traded and timestamp < DISPLAY_LENGTH * 100:
             print(f"Positions: {state.position}")
+            print(f"Cash: {trader.cash}\n")
             print(f"PNL: {trader.pnl}\n")
         
         # Record pnl over time for plotting
