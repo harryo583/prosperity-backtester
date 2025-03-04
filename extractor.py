@@ -106,14 +106,15 @@ for entry in sandbox_json_objects:
         for sym, trades in lambda_log.get("market_trades", {}).items():
             market_trades[sym] = []
             for t in trades:
-                market_trades[sym].append(
-                    Trade(symbol=t["symbol"],
-                          price=int(t["price"]),
-                          quantity=int(t["quantity"]),
-                          buyer=t.get("buyer"),
-                          seller=t.get("seller"),
-                          timestamp=int(t.get("timestamp", 0)))
-                )
+                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100:
+                    market_trades[sym].append(
+                        Trade(symbol=t["symbol"],
+                            price=int(t["price"]),
+                            quantity=int(t["quantity"]),
+                            buyer=t.get("buyer"),
+                            seller=t.get("seller"),
+                            timestamp=int(t.get("timestamp", 0)))
+                    )
 
         # Build own_trades with proper int conversion
         own_trades = {}
