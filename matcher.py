@@ -58,6 +58,7 @@ def match_buy_order(state: TradingState, next_state: TradingState, order: Order)
                 )
                 market_trade.quantity -= matched_quantity
                 remaining_quantity -= matched_quantity
+    print("Trades:", trades)
     return trades
 
 def match_sell_order(state: TradingState, next_state: TradingState, order: Order) -> List[Trade]:

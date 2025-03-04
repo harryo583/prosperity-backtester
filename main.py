@@ -8,7 +8,7 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
 VERBOSE = False
-DISPLAY_LENGTH = 13
+DISPLAY_LENGTH = None
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
@@ -76,7 +76,8 @@ def main() -> None:
         next_state = trading_states[i + 1] if i < len(trading_states) - 1 else None
         timestamp = state.timestamp
         traded = False
-        if timestamp > DISPLAY_LENGTH * 100:
+        
+        if DISPLAY_LENGTH and timestamp > DISPLAY_LENGTH * 100:
             break
 
         # Update the state with newest trader data
@@ -122,7 +123,7 @@ def main() -> None:
                         "quantity": trade.quantity
                     })
                 
-                if trades_executed and timestamp < DISPLAY_LENGTH * 100:
+                if DISPLAY_LENGTH and trades_executed and timestamp < DISPLAY_LENGTH * 100:
                     traded = True
                     print(f"[{timestamp}]")
                     if VERBOSE:
@@ -130,6 +131,7 @@ def main() -> None:
                     else:
                         for trade in trades_executed:
                             print_self_trade(trade)
+        
         
         if traded and timestamp < DISPLAY_LENGTH * 100:
             print(f"Positions: {state.position}")
