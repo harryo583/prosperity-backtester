@@ -15,6 +15,7 @@ POSITION_LIMITS = {
 }
 
 VERBOSE = False
+DISPLAY_LENGTH = 10
 
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
@@ -107,18 +108,19 @@ def main() -> None:
                         "quantity": trade.quantity
                     })
                 
-                if trades_executed:
+                if trades_executed and timestamp < DISPLAY_LENGTH * 100:
                     if VERBOSE:
                         print(f"[{timestamp}] Executed trades for order {order}: {trades_executed}")
                     else:
                         print(f"[{timestamp}]")
                         for trade in trades_executed:
                             print_self_trade(trade)
-                elif VERBOSE:
+                elif VERBOSE and timestamp < DISPLAY_LENGTH * 100:
                     print(f"[{timestamp}] No trades executed for order {order}.")
         
-        print(f"Positions: {state.position}")
-        print(f"PNL: {trader.pnl}\n")
+        if timestamp < DISPLAY_LENGTH * 100:
+            print(f"Positions: {state.position}")
+            print(f"PNL: {trader.pnl}\n")
         
         # Record pnl over time for plotting
         pnl_over_time.append((timestamp, trader.pnl))
