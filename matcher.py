@@ -89,7 +89,6 @@ def match_sell_order(state: TradingState, next_state: TradingState, order: Order
 
     # Fill any remaining quantity with market trades
     if remaining_quantity > 0 and market_trades and order.symbol in market_trades:
-        print("HELLO")
         for market_trade in market_trades[order.symbol]:
             if remaining_quantity <= 0:
                 break
