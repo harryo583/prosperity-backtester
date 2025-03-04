@@ -8,13 +8,14 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
 VERBOSE = False
-DISPLAY_LENGTH = 5
+DISPLAY_LENGTH = 13
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 100,
     "KELP": 100
 }
+
 
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
@@ -31,7 +32,8 @@ def print_self_trade(trade):
     elif trade.buyer == "SUBMISSION":
         print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
 
-def plot_pnl_over_time(pnl_over_time):
+
+def plot_pnl(pnl_over_time):
     """
     Plots the PnL over time
     """
@@ -69,18 +71,19 @@ def main() -> None:
     position = {prod: 0 for prod in PRODUCTS}
     traderData = None
 
-    for state in trading_states:
+    for i, state in enumerate(trading_states):
         
-        # Correct the state with locally tracked trader data
-        state.position = position
-        state.traderData = traderData # traderData from the last run
-        
+        next_state = trading_states[i + 1] if i < len(trading_states) - 1 else None
         timestamp = state.timestamp
-        if timestamp < DISPLAY_LENGTH: 
-            print(state)
+        traded = False
+        if timestamp > DISPLAY_LENGTH * 100:
+            break
+
+        # Update the state with newest trader data
+        state.position = position
+        state.traderData = traderData # traderData from previous run
+        
         result, conversions, traderData = trader.run(state)
-        if timestamp < DISPLAY_LENGTH:
-            print("Result: ", result)
         
         for product, orders_list in result.items():
             current_position = position.get(product, 0)
@@ -96,13 +99,13 @@ def main() -> None:
             # Process each order by matching against order depths
             for order in orders_list:
                 trades_executed = []
-                if order.quantity > 0:  # buy order
-                    trades_executed = match_buy_order(state, order)
+                if order.quantity > 0: # buy order
+                    trades_executed = match_buy_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) + total_filled  # update trader position
                     trader.pnl -= sum(trade.price * trade.quantity for trade in trades_executed)  # update pnl
                 elif order.quantity < 0:  # sell order
-                    trades_executed = match_sell_order(state, order)
+                    trades_executed = match_sell_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) - total_filled  # update trader position
                     trader.pnl += sum(trade.price * trade.quantity for trade in trades_executed)  # update pnl
@@ -120,16 +123,15 @@ def main() -> None:
                     })
                 
                 if trades_executed and timestamp < DISPLAY_LENGTH * 100:
+                    traded = True
+                    print(f"[{timestamp}]")
                     if VERBOSE:
-                        print(f"[{timestamp}] Executed trades for order {order}: {trades_executed}")
+                        print(f"Executed trades for order {order}: {trades_executed}")
                     else:
-                        print(f"[{timestamp}]")
                         for trade in trades_executed:
                             print_self_trade(trade)
-                elif VERBOSE and timestamp < DISPLAY_LENGTH * 100:
-                    print(f"[{timestamp}] No trades executed for order {order}.")
         
-        if timestamp < DISPLAY_LENGTH * 100:
+        if traded and timestamp < DISPLAY_LENGTH * 100:
             print(f"Positions: {state.position}")
             print(f"PNL: {trader.pnl}\n")
         
@@ -204,7 +206,7 @@ def main() -> None:
     print("Exported market_conditions.csv and trade_history.csv")
     
     # Call the plotting function to generate the PnL over time graph
-    plot_pnl_over_time(pnl_over_time)
+    plot_pnl(pnl_over_time)
 
 
 if __name__ == "__main__":
