@@ -7,15 +7,14 @@ from pathlib import Path
 from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
-PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
+VERBOSE = False
+DISPLAY_LENGTH = 5
 
+PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 100,
     "KELP": 100
 }
-
-VERBOSE = False
-DISPLAY_LENGTH = 10
 
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
@@ -51,7 +50,7 @@ def plot_pnl_over_time(pnl_over_time):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig("results/pnl_over_time.png")  # saves the plot as a PNG file
-    plt.show()
+    # plt.show()
 
 
 def main() -> None:
@@ -65,19 +64,33 @@ def main() -> None:
     market_conditions = []  # list of dicts for market conditions snapshot
     trade_history_list = []  # list of dicts for each executed trade
     pnl_over_time = []  # list to track (timestamp, pnl)
+    
+    # Variables to keep track of trader logs
+    position = {prod: 0 for prod in PRODUCTS}
+    traderData = None
 
     for state in trading_states:
+        
+        # Correct the state with locally tracked trader data
+        state.position = position
+        state.traderData = traderData # traderData from the last run
+        
         timestamp = state.timestamp
+        if timestamp < DISPLAY_LENGTH: 
+            print(state)
         result, conversions, traderData = trader.run(state)
+        if timestamp < DISPLAY_LENGTH:
+            print("Result: ", result)
         
         for product, orders_list in result.items():
-            current_position = state.position.get(product, 0)
+            current_position = position.get(product, 0)
             total_buy = sum(order.quantity for order in orders_list if order.quantity > 0)
             total_sell = sum(-order.quantity for order in orders_list if order.quantity < 0)
             pos_limit = POSITION_LIMITS.get(product, 0)
             
             if current_position + total_buy > pos_limit or current_position - total_sell < -pos_limit:
-                print(f"[{timestamp}] Position limit exceeded for {product}. Cancelling all orders.")
+                if VERBOSE:
+                    print(f"[{timestamp}] Position limit exceeded for {product}. Cancelling all orders.")
                 continue
             
             # Process each order by matching against order depths
@@ -86,14 +99,12 @@ def main() -> None:
                 if order.quantity > 0:  # buy order
                     trades_executed = match_buy_order(state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
-                    state.position.setdefault(product, 0)
-                    state.position[product] += total_filled  # update trader position
+                    position[product] = position.get(product, 0) + total_filled  # update trader position
                     trader.pnl -= sum(trade.price * trade.quantity for trade in trades_executed)  # update pnl
                 elif order.quantity < 0:  # sell order
                     trades_executed = match_sell_order(state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
-                    state.position.setdefault(product, 0)
-                    state.position[product] -= total_filled  # update trader position
+                    position[product] = position.get(product, 0) - total_filled  # update trader position
                     trader.pnl += sum(trade.price * trade.quantity for trade in trades_executed)  # update pnl
                 
                 # Record each executed trade in trade_history_list
