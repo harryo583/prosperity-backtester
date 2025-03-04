@@ -4,9 +4,9 @@ import pandas as pd
 from typing import List, Dict
 from datamodel import TradingState, Order, Symbol, Trade
 
-def match_buy_order(state: TradingState, order: Order) -> List[Trade]:
+def match_buy_order(state: TradingState, next_state: TradingState, order: Order) -> List[Trade]:
     trades = []
-    market_trades = state.market_trades
+    market_trades = next_state.market_trades if next_state else None
     remaining_quantity = order.quantity
     order_depth = state.order_depths.get(order.symbol)
     
@@ -35,7 +35,7 @@ def match_buy_order(state: TradingState, order: Order) -> List[Trade]:
                 return trades
     
     # Fill any remaining quantity with market trades
-    if remaining_quantity > 0 and order.symbol in market_trades:
+    if remaining_quantity > 0 and market_trades and order.symbol in market_trades:
         for market_trade in market_trades[order.symbol]:
             if remaining_quantity <= 0:
                 break
@@ -57,9 +57,9 @@ def match_buy_order(state: TradingState, order: Order) -> List[Trade]:
                 remaining_quantity -= matched_quantity
     return trades
 
-def match_sell_order(state: TradingState, order: Order) -> List[Trade]:
+def match_sell_order(state: TradingState, next_state: TradingState, order: Order) -> List[Trade]:
     trades = []
-    market_trades = state.market_trades
+    market_trades = next_state.market_trades if next_state else None
     remaining_quantity = abs(order.quantity) # sell order quantities are negative by convetion
     order_depth = state.order_depths.get(order.symbol)
     
@@ -86,9 +86,10 @@ def match_sell_order(state: TradingState, order: Order) -> List[Trade]:
             remaining_quantity -= matched_quantity
             if remaining_quantity == 0:
                 return trades
-    
+
     # Fill any remaining quantity with market trades
-    if remaining_quantity > 0 and order.symbol in market_trades:
+    if remaining_quantity > 0 and market_trades and order.symbol in market_trades:
+        print("HELLO")
         for market_trade in market_trades[order.symbol]:
             if remaining_quantity <= 0:
                 break
