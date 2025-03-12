@@ -10,4 +10,3 @@ __pycache__/
 # Ignore backtest results
 backtests/
 results/
-algorithms/
