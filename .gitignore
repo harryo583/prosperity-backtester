@@ -6,8 +6,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+tempcoderunnerfile*
 
-# Ignore backtest results
+
+# Ignore backtest results and algorithms
 backtests/
 results/
 algorithms/
