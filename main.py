@@ -7,9 +7,8 @@ from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 import json
 
-VERBOSE = False
 CML_LOG_LENGTH = None
-DISPLAY_PNL = False
+VERBOSE = False
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
@@ -95,6 +94,7 @@ def load_trading_states(log_path: str):
         )
     return [convert_trading_state(d) for d in trading_states_data]
 
+
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
     if not algorithm_path.is_file():
@@ -103,11 +103,13 @@ def parse_algorithm(algo_path: str):
     sys.path.append(str(algorithm_path.parent))
     return import_module(algorithm_path.stem)
 
+
 def print_self_trade(trade):
     if trade.seller == "SUBMISSION":
         print(f"Sold {trade.quantity} {trade.symbol} at {trade.price}.")
     elif trade.buyer == "SUBMISSION":
         print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
+
 
 def plot_pnl(pnl_over_time):
     """
@@ -128,11 +130,9 @@ def plot_pnl(pnl_over_time):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig(f"results/round-{round_number}/pnl_over_time.png")
-    
-    if DISPLAY_PNL:
-        plt.show()
 
-def main(algo_path = None) -> None:
+
+def main(algo_path=None) -> None:
     if not algo_path:
         print("No algo path provided, using algorithms/algo.py")
         algo_path = "algorithms/algo.py"
@@ -289,15 +289,17 @@ def main(algo_path = None) -> None:
     
     plot_pnl(pnl_over_time)  # call plotting function
 
+
 if __name__ == "__main__":
-    if len(sys.argv) <= 1:
-        print("No round number provided. Defaulting to round-0.")
-        round_number = 0
-        trading_states = load_trading_states("data/round-0/trading_states.json")
-    else:
-        round_number = sys.argv[1]
-        trading_states = load_trading_states(f"data/round-{round_number}/trading_states.json")
-    
+    # Command-line arguments in this order:
+    #   1. Round number (int between 0~5, defaults to 0)
+    #   2. Algorithm path (defaults to algorithms/algo.py)
+    #   3. Log length (int, number of timestamps to backtest, defaults to all)
+    #   4. Verbose (0 or 1, defaults to 0)
+    round_number = sys.argv[1] if len(sys.argv) > 1 else "0"
+    trading_states = load_trading_states(f"data/round-{round_number}/trading_states.json")
     algo_path = sys.argv[2] if len(sys.argv) > 2 else None
-    
+    CML_LOG_LENGTH = int(sys.argv[3]) if len(sys.argv) > 3 else None
+    VERBOSE = sys.argv[4].lower() in ["true", "1", "yes"] if len(sys.argv) > 4 else False
+
     main(algo_path)
