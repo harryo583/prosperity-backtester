@@ -1,8 +1,7 @@
 # matcher.py
 
-import pandas as pd
-from typing import List, Dict
-from datamodel import TradingState, Order, Symbol, Trade
+from typing import List
+from datamodel import TradingState, Order, Trade
 
 def match_buy_order(state: TradingState, next_state: TradingState, order: Order) -> List[Trade]:
     trades = []
