@@ -7,9 +7,6 @@ from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 import json
 
-CML_LOG_LENGTH = None
-VERBOSE = False
-
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 100,
@@ -296,9 +293,6 @@ if __name__ == "__main__":
     #   2. Algorithm path (defaults to "algorithms/algo.py")
     #   3. Log length (int, number of timestamps to backtest, defaults to all)
     #   4. Verbose (true/false, 1/0, yes/no; defaults to false)
-
-    from pathlib import Path
-    import sys
 
     # Validate round number
     if len(sys.argv) > 1:
