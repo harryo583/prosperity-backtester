@@ -58,8 +58,11 @@ def plot_pnl(pnl_over_time):
         plt.show()
 
 
-def main() -> None:
-    algo_path = "algorithms/algo.py"
+def main(algo_path = None) -> None:
+    if not algo_path:
+        print("No algo path provided, using algorithms/algo.py")
+        algo_path = "algorithms/algo.py"
+    
     trader_module = parse_algorithm(algo_path)
     
     trader = trader_module.Trader()  # trader instance
