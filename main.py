@@ -127,7 +127,7 @@ def plot_pnl(pnl_over_time):
     plt.title("PnL Over Time")
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.savefig("results/pnl_over_time.png")
+    plt.savefig(f"results/round-{round_number}/pnl_over_time.png")
     
     if DISPLAY_PNL:
         plt.show()
@@ -278,11 +278,11 @@ def main(algo_path = None) -> None:
         "ask_price_1", "ask_volume_1", "ask_price_2", "ask_volume_2", "ask_price_3", "ask_volume_3",
         "mid_price", "profit_and_loss"
     ]]
-    market_conditions_df.to_csv("results/orderbook.csv", sep=";", index=False)
+    market_conditions_df.to_csv(f"results/round-{round_number}/orderbook.csv", sep=";", index=False)
     
     trade_history_df = pd.DataFrame(trade_history_list)
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
-    trade_history_df.to_csv("results/trade_history.csv", sep=";", index=False)
+    trade_history_df.to_csv(f"results/round-{round_number}/trade_history.csv", sep=";", index=False)
     
     print("Overall PNL:", trader.pnl)
     print("Exported orderbook.csv and trade_history.csv.")
@@ -292,6 +292,7 @@ def main(algo_path = None) -> None:
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
         print("No round number provided. Defaulting to round-0.")
+        round_number = 0
         trading_states = load_trading_states("data/round-0/trading_states.json")
     else:
         round_number = sys.argv[1]
