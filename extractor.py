@@ -40,7 +40,7 @@ trade_history_lines = []
 activities_header = None
 current_section = None
 
-with open(f"raw_data/round-{round_number}/logs.log", 'r') as f:
+with open(f"logs/round-{round_number}/logs.log", 'r') as f:
     for line in f:
         line_strip = line.strip()
         if not line_strip:

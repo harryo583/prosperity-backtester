@@ -278,14 +278,14 @@ def main(algo_path = None) -> None:
         "ask_price_1", "ask_volume_1", "ask_price_2", "ask_volume_2", "ask_price_3", "ask_volume_3",
         "mid_price", "profit_and_loss"
     ]]
-    market_conditions_df.to_csv("results/market_conditions.csv", sep=";", index=False)
+    market_conditions_df.to_csv("results/orderbook.csv", sep=";", index=False)
     
     trade_history_df = pd.DataFrame(trade_history_list)
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv("results/trade_history.csv", sep=";", index=False)
     
     print("Overall PNL:", trader.pnl)
-    print("Exported market_conditions.csv and trade_history.csv to the results directory")
+    print("Exported orderbook.csv and trade_history.csv.")
     
     plot_pnl(pnl_over_time)  # call plotting function
 
