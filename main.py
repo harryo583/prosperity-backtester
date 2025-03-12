@@ -1,10 +1,11 @@
 import pandas as pd
 import sys
 import matplotlib.pyplot as plt
-from extractor import trading_states
 from pathlib import Path
 from importlib import import_module
 from matcher import match_buy_order, match_sell_order
+from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
+import json
 
 VERBOSE = False
 CML_LOG_LENGTH = None
@@ -17,6 +18,83 @@ POSITION_LIMITS = {
 }
 
 
+def load_trading_states(log_path: str):
+    """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
+    with open(log_path, "r") as f:
+        trading_states_data = json.load(f)
+    
+    def convert_trading_state(d):
+        # Convert listings
+        listings = {}
+        for sym, data in d.get("listings", {}).items():
+            listings[sym] = Listing(
+                symbol=data["symbol"],
+                product=data["product"],
+                denomination=data["denomination"]
+            )
+        
+        # Convert order depths
+        order_depths = {}
+        for sym, data in d.get("order_depths", {}).items():
+            od = OrderDepth()
+            od.buy_orders = {int(k): int(v) for k, v in data.get("buy_orders", {}).items()}
+            od.sell_orders = {int(k): int(v) for k, v in data.get("sell_orders", {}).items()}
+            order_depths[sym] = od
+        
+        # Convert trades
+        def convert_trades(trades):
+            return [
+                Trade(
+                    symbol=t["symbol"],
+                    price=int(t["price"]),
+                    quantity=int(t["quantity"]),
+                    buyer=t.get("buyer"),
+                    seller=t.get("seller"),
+                    timestamp=int(t["timestamp"])
+                ) for t in trades
+            ]
+        market_trades = {}
+        for sym, trades in d.get("market_trades", {}).items():
+            market_trades[sym] = convert_trades(trades)
+        own_trades = {}
+        for sym, trades in d.get("own_trades", {}).items():
+            own_trades[sym] = convert_trades(trades)
+        
+        # Convert position
+        position = {prod: int(val) for prod, val in d.get("position", {}).items()}
+        
+        # Convert observations
+        obs = d.get("observations", {})
+        plain_obs = {prod: int(val) for prod, val in obs.get("plainValueObservations", {}).items()}
+        conv_obs_data = obs.get("conversionObservations", {})
+        conv_obs = {}
+        for prod, details in conv_obs_data.items():
+            conv_obs[prod] = ConversionObservation(
+                bidPrice=float(details.get("bidPrice", 0.0)),
+                askPrice=float(details.get("askPrice", 0.0)),
+                transportFees=float(details.get("transportFees", 0.0)),
+                exportTariff=float(details.get("exportTariff", 0.0)),
+                importTariff=float(details.get("importTariff", 0.0)),
+                sugarPrice=float(details.get("sugarPrice", 0.0)),
+                sunlightIndex=float(details.get("sunlightIndex", 0.0))
+            )
+        observations = Observation(
+            plainValueObservations=plain_obs,
+            conversionObservations=conv_obs
+        )
+        # Create and return the TradingState object
+        return TradingState(
+            traderData=d.get("traderData", ""),
+            timestamp=int(d.get("timestamp", 0)),
+            listings=listings,
+            order_depths=order_depths,
+            own_trades=own_trades,
+            market_trades=market_trades,
+            position=position,
+            observations=observations
+        )
+    return [convert_trading_state(d) for d in trading_states_data]
+
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
     if not algorithm_path.is_file():
@@ -25,17 +103,15 @@ def parse_algorithm(algo_path: str):
     sys.path.append(str(algorithm_path.parent))
     return import_module(algorithm_path.stem)
 
-
 def print_self_trade(trade):
     if trade.seller == "SUBMISSION":
         print(f"Sold {trade.quantity} {trade.symbol} at {trade.price}.")
     elif trade.buyer == "SUBMISSION":
         print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
 
-
 def plot_pnl(pnl_over_time):
     """
-    Plots the PnL over time
+    Plots the PnL over time.
     """
     if not pnl_over_time:
         print("No PnL data available to plot.")
@@ -55,7 +131,6 @@ def plot_pnl(pnl_over_time):
     
     if DISPLAY_PNL:
         plt.show()
-
 
 def main(algo_path = None) -> None:
     if not algo_path:
@@ -78,7 +153,6 @@ def main(algo_path = None) -> None:
     traderData = None
 
     for i, state in enumerate(trading_states):
-        
         next_state = trading_states[i + 1] if i < len(trading_states) - 1 else None
         timestamp = state.timestamp
         traded = False
@@ -88,7 +162,7 @@ def main(algo_path = None) -> None:
 
         # Update the state with newest trader data
         state.position = position
-        state.traderData = traderData # traderData from previous run
+        state.traderData = traderData  # traderData from previous run
         
         result, conversions, traderData = trader.run(state)
         
@@ -106,7 +180,7 @@ def main(algo_path = None) -> None:
             # Process each order by matching against order depths
             for order in orders_list:
                 trades_executed = []
-                if order.quantity > 0: # buy order
+                if order.quantity > 0:  # buy order
                     trades_executed = match_buy_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) + total_filled  # update trader position
@@ -157,8 +231,8 @@ def main(algo_path = None) -> None:
             ts = state.timestamp
             od = state.order_depths.get(product, None)
             if od is not None:
-                bids = sorted(od.buy_orders.items(), key=lambda x: x[0], reverse=True) # top 3 bids
-                asks = sorted(od.sell_orders.items(), key=lambda x: x[0]) # top 3 asks
+                bids = sorted(od.buy_orders.items(), key=lambda x: x[0], reverse=True)  # top 3 bids
+                asks = sorted(od.sell_orders.items(), key=lambda x: x[0])  # top 3 asks
             else:
                 bids = []
                 asks = []
@@ -204,7 +278,6 @@ def main(algo_path = None) -> None:
         "ask_price_1", "ask_volume_1", "ask_price_2", "ask_volume_2", "ask_price_3", "ask_volume_3",
         "mid_price", "profit_and_loss"
     ]]
-    
     market_conditions_df.to_csv("results/market_conditions.csv", sep=";", index=False)
     
     trade_history_df = pd.DataFrame(trade_history_list)
@@ -212,12 +285,16 @@ def main(algo_path = None) -> None:
     trade_history_df.to_csv("results/trade_history.csv", sep=";", index=False)
     
     print("Overall PNL:", trader.pnl)
-    
     print("Exported market_conditions.csv and trade_history.csv to the results directory")
     
-    plot_pnl(pnl_over_time) # call plotting function
-
+    plot_pnl(pnl_over_time)  # call plotting function
 
 if __name__ == "__main__":
-    algo_path = sys.argv[1] if len(sys.argv) > 1 else None
+    if len(sys.argv) <= 1:
+        print("No round number provided. Defaulting to round-0.")
+        trading_states = load_trading_states("data/round-0/trading_states.json")
+    else:
+        round_number = sys.argv[1]
+        trading_states = load_trading_states(f"data/round-{round_number}/trading_states.json")
+    algo_path = sys.argv[2] if len(sys.argv) > 2 else None
     main(algo_path)
