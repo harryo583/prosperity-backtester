@@ -8,7 +8,8 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
 VERBOSE = False
-DISPLAY_LENGTH = None
+CML_LOG_LENGTH = None
+DISPLAY_PNL = False
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
@@ -45,14 +46,16 @@ def plot_pnl(pnl_over_time):
     timestamps, pnl_values = zip(*pnl_over_time)
     
     plt.figure(figsize=(10, 6))
-    plt.plot(timestamps, pnl_values, marker="o")
+    plt.plot(timestamps, pnl_values, marker="o", markersize=2)
     plt.xlabel("Timestamp")
     plt.ylabel("Profit and Loss")
     plt.title("PnL Over Time")
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.savefig("results/pnl_over_time.png")  # saves the plot as a PNG file
-    # plt.show()
+    
+    if DISPLAY_PNL:
+        plt.show()
 
 
 def main() -> None:
@@ -78,7 +81,7 @@ def main() -> None:
         timestamp = state.timestamp
         traded = False
         
-        if DISPLAY_LENGTH and timestamp > DISPLAY_LENGTH * 100:
+        if CML_LOG_LENGTH and timestamp > CML_LOG_LENGTH * 100:
             break
 
         # Update the state with newest trader data
@@ -124,7 +127,7 @@ def main() -> None:
                         "quantity": trade.quantity
                     })
                 
-                if DISPLAY_LENGTH and trades_executed and timestamp < DISPLAY_LENGTH * 100:
+                if CML_LOG_LENGTH and trades_executed and timestamp < CML_LOG_LENGTH * 100:
                     traded = True
                     print(f"[{timestamp}]")
                     if VERBOSE:
@@ -138,7 +141,7 @@ def main() -> None:
             mid_price = (max(state.order_depths[product].buy_orders) + min(state.order_depths[product].sell_orders)) / 2
             trader.pnl += pos * mid_price
                     
-        if traded and timestamp < DISPLAY_LENGTH * 100:
+        if traded and timestamp < CML_LOG_LENGTH * 100:
             print(f"Positions: {state.position}")
             print(f"Cash: {trader.cash}\n")
             print(f"PNL: {trader.pnl}\n")
