@@ -40,7 +40,7 @@ trade_history_lines = []
 activities_header = None
 current_section = None
 
-with open(f"data/round-{round_number}/logs.log", 'r') as f:
+with open(f"raw_data/round-{round_number}/logs.log", 'r') as f:
     for line in f:
         line_strip = line.strip()
         if not line_strip:
@@ -106,14 +106,14 @@ for entry in sandbox_json_objects:
         for sym, trades in lambda_log.get("market_trades", {}).items():
             market_trades[sym] = []
             for t in trades:
-                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100: # filter for past timestep's market trades
+                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100:  # filter for past timestep's market trades
                     market_trades[sym].append(
                         Trade(symbol=t["symbol"],
-                            price=int(t["price"]),
-                            quantity=int(t["quantity"]),
-                            buyer=t.get("buyer"),
-                            seller=t.get("seller"),
-                            timestamp=int(t.get("timestamp", 0)))
+                              price=int(t["price"]),
+                              quantity=int(t["quantity"]),
+                              buyer=t.get("buyer"),
+                              seller=t.get("seller"),
+                              timestamp=int(t.get("timestamp", 0)))
                     )
 
         # Build own_trades with proper int conversion
@@ -168,13 +168,21 @@ for entry in sandbox_json_objects:
         trading_states.append(state)
 
 ########################################################################
+# Write Trading States to Log File
+########################################################################
+# Convert each TradingState into a dictionary (via its JSON representation)
+trading_states_list = [json.loads(state.toJSON()) for state in trading_states]
+with open(f"data/round-{round_number}/trading_states.json", "w") as ts_file:
+    json.dump(trading_states_list, ts_file, indent=2)
+
+########################################################################
 # Process Activity Logs
 ########################################################################
 
 activities_df = pd.DataFrame(activities_lines, columns=activities_header)
 activities_df.drop(columns=['day'], inplace=True)
 
-# Rename profit_and_loss to pnl and adjust bid/ask volume column names.
+# Rename profit_and_loss to pnl and adjust bid/ask volume column names
 activities_df.rename(columns={
     'profit_and_loss': 'pnl',
     'bid_volume_1': 'bid_vol_1',
@@ -185,7 +193,7 @@ activities_df.rename(columns={
     'ask_volume_3': 'ask_vol_3'
 }, inplace=True)
 
-# Split by product and drop the redundant 'product' column from each DataFrame.
+# Split by product and drop the redundant 'product' column from each DataFrame
 product_dfs = {
     product: activities_df[activities_df['product'] == product]
                 .drop(columns=['product'])
@@ -206,7 +214,6 @@ if trade_history_lines:
         trade_df = pd.DataFrame(trades_data)
         trade_df = trade_df[['symbol', 'price', 'quantity', 'timestamp']]
         # Create a separate DataFrame for each product (grouped by symbol)
-        # and drop the 'symbol' column from each.
         trade_product_dfs = {
             symbol: trade_df[trade_df['symbol'] == symbol]
                         .drop(columns=['symbol'])
@@ -215,7 +222,6 @@ if trade_history_lines:
         }
     except json.JSONDecodeError as e:
         print("Error parsing trade history:", e)
-
 
 ########################################################################
 # main()

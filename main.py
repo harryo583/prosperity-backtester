@@ -1,7 +1,6 @@
 import pandas as pd
 import sys
 import matplotlib.pyplot as plt
-from datamodel import TradingState, Order
 from extractor import trading_states
 from pathlib import Path
 from importlib import import_module
