@@ -100,8 +100,6 @@ def main() -> None:
             
             # Process each order by matching against order depths
             for order in orders_list:
-                if state.timestamp == 1200:
-                    print("My order:", order)
                 trades_executed = []
                 if order.quantity > 0: # buy order
                     trades_executed = match_buy_order(state, next_state, order)
@@ -215,7 +213,7 @@ def main() -> None:
     
     print("Overall PNL:", trader.pnl)
     
-    print("Exported market_conditions.csv and trade_history.csv")
+    print("Exported market_conditions.csv and trade_history.csv to the results directory")
     
     plot_pnl(pnl_over_time) # call plotting function
 
