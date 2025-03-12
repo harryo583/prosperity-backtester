@@ -50,6 +50,6 @@ class Trader:
         
         for product in state.order_depths:
             if product == RESIN:
-                result[RESIN] = self.resin_strategy_backup(state)
+                result[RESIN] = self.resin_strategy(state)
         
         return result, conversions, traderData

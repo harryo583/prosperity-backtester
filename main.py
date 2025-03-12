@@ -52,7 +52,7 @@ def plot_pnl(pnl_over_time):
     plt.title("PnL Over Time")
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.savefig("results/pnl_over_time.png")  # saves the plot as a PNG file
+    plt.savefig("results/pnl_over_time.png")
     
     if DISPLAY_PNL:
         plt.show()
@@ -71,8 +71,8 @@ def main(algo_path = None) -> None:
     
     # Containers for exporting CSVs and tracking PnL
     market_conditions = []  # list of dicts for market conditions snapshot
-    trade_history_list = []  # list of dicts for each executed trade
-    pnl_over_time = []  # list to track (timestamp, pnl)
+    trade_history_list = []  # list of dicts for each trade
+    pnl_over_time = []  # list of (timestamp, pnl)
     
     # Variables to keep track of trader logs
     position = {prod: 0 for prod in PRODUCTS}
@@ -149,34 +149,29 @@ def main(algo_path = None) -> None:
             print(f"Cash: {trader.cash}\n")
             print(f"PNL: {trader.pnl}\n")
         
-        # Record pnl over time for plotting
+        # Record pnl over time
         pnl_over_time.append((timestamp, trader.pnl))
         
-        # For each product, record a snapshot of the market conditions
+        # Record market condition snapshot for each product
         for product in PRODUCTS:
             day = -1
             ts = state.timestamp
             od = state.order_depths.get(product, None)
             if od is not None:
-                # Get top 3 bid orders (buy_orders sorted descending by price)
-                bids = sorted(od.buy_orders.items(), key=lambda x: x[0], reverse=True)
-                # Get top 3 ask orders (sell_orders sorted ascending by price)
-                asks = sorted(od.sell_orders.items(), key=lambda x: x[0])
+                bids = sorted(od.buy_orders.items(), key=lambda x: x[0], reverse=True) # top 3 bids
+                asks = sorted(od.sell_orders.items(), key=lambda x: x[0]) # top 3 asks
             else:
                 bids = []
                 asks = []
             
-            # Unpack up to 3 bids; if missing, use empty strings
             bid_price_1, bid_vol_1 = bids[0] if len(bids) > 0 else ("", "")
             bid_price_2, bid_vol_2 = bids[1] if len(bids) > 1 else ("", "")
             bid_price_3, bid_vol_3 = bids[2] if len(bids) > 2 else ("", "")
 
-            # Unpack up to 3 asks
             ask_price_1, ask_vol_1 = asks[0] if len(asks) > 0 else ("", "")
             ask_price_2, ask_vol_2 = asks[1] if len(asks) > 1 else ("", "")
             ask_price_3, ask_vol_3 = asks[2] if len(asks) > 2 else ("", "")
             
-            # Compute mid_price if both bid and ask exist
             if bids and asks:
                 mid_price = (bids[0][0] + asks[0][0]) / 2.0
             else:
@@ -225,4 +220,5 @@ def main(algo_path = None) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    algo_path = sys.argv[1] if len(sys.argv) > 1 else None
+    main(algo_path)
