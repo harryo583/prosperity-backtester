@@ -291,15 +291,71 @@ def main(algo_path=None) -> None:
 
 
 if __name__ == "__main__":
-    # Command-line arguments in this order:
-    #   1. Round number (int between 0~5, defaults to 0)
-    #   2. Algorithm path (defaults to algorithms/algo.py)
+    # Expected optional arguments (in order):
+    #   1. Round number (int between 0 and 5, defaults to 0)
+    #   2. Algorithm path (defaults to "algorithms/algo.py")
     #   3. Log length (int, number of timestamps to backtest, defaults to all)
-    #   4. Verbose (0 or 1, defaults to 0)
-    round_number = sys.argv[1] if len(sys.argv) > 1 else "0"
-    trading_states = load_trading_states(f"data/round-{round_number}/trading_states.json")
-    algo_path = sys.argv[2] if len(sys.argv) > 2 else None
-    CML_LOG_LENGTH = int(sys.argv[3]) if len(sys.argv) > 3 else None
-    VERBOSE = sys.argv[4].lower() in ["true", "1", "yes"] if len(sys.argv) > 4 else False
+    #   4. Verbose (true/false, 1/0, yes/no; defaults to false)
+
+    from pathlib import Path
+    import sys
+
+    # Validate round number
+    if len(sys.argv) > 1:
+        try:
+            round_number = int(sys.argv[1])
+            if round_number < 0 or round_number > 5:
+                raise ValueError("Round number must be between 0 and 5.")
+        except ValueError as e:
+            print(f"Invalid round number provided: {sys.argv[1]}. {e}")
+            sys.exit(1)
+    else:
+        round_number = 0
+
+    # Validate algorithm path
+    if len(sys.argv) > 2:
+        algo_path = sys.argv[2]
+        algo_file = Path(algo_path).expanduser().resolve()
+        if not algo_file.is_file():
+            print(f"Algorithm file not found: {algo_path}")
+            sys.exit(1)
+        algo_path = str(algo_file)  # Use resolved path as string
+    else:
+        algo_path = "algorithms/algo.py"
+        default_algo = Path(algo_path).expanduser().resolve()
+        if not default_algo.is_file():
+            print(f"Default algorithm file not found: {algo_path}")
+            sys.exit(1)
+
+    # Validate log length
+    if len(sys.argv) > 3:
+        try:
+            CML_LOG_LENGTH = int(sys.argv[3])
+            if CML_LOG_LENGTH <= 0:
+                raise ValueError("Log length must be a positive integer.")
+        except ValueError as e:
+            print(f"Invalid log length provided: {sys.argv[3]}. {e}")
+            sys.exit(1)
+    else:
+        CML_LOG_LENGTH = None
+
+    # Validate verbose flag
+    if len(sys.argv) > 4:
+        verbose_arg = sys.argv[4].lower()
+        valid_verbose = ["true", "1", "yes", "false", "0", "no"]
+        if verbose_arg not in valid_verbose:
+            print(f"Invalid verbose flag provided: {sys.argv[4]}. Use true/false, 1/0, yes/no.")
+            sys.exit(1)
+        VERBOSE = verbose_arg in ["true", "1", "yes"]
+    else:
+        VERBOSE = False
+
+    # Check that the trading states file exists
+    trading_states_file = f"data/round-{round_number}/trading_states.json"
+    if not Path(trading_states_file).expanduser().resolve().is_file():
+        print(f"Trading states file not found: {trading_states_file}")
+        sys.exit(1)
+
+    trading_states = load_trading_states(trading_states_file)
 
     main(algo_path)
