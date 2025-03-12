@@ -213,6 +213,8 @@ def main() -> None:
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv("results/trade_history.csv", sep=";", index=False)
     
+    print("Overall PNL:", trader.pnl)
+    
     print("Exported market_conditions.csv and trade_history.csv")
     
     plot_pnl(pnl_over_time) # call plotting function
