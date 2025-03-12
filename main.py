@@ -296,5 +296,7 @@ if __name__ == "__main__":
     else:
         round_number = sys.argv[1]
         trading_states = load_trading_states(f"data/round-{round_number}/trading_states.json")
+    
     algo_path = sys.argv[2] if len(sys.argv) > 2 else None
+    
     main(algo_path)
