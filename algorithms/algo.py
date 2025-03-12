@@ -41,6 +41,7 @@ class Trader:
                 orders.append(Order(RESIN, theo + 2, ask_volume))
         
         return orders
+    
 
     def run(self, state: TradingState) -> Dict[str, List[Order]]:
         """

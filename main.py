@@ -8,7 +8,7 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
 VERBOSE = False
-DISPLAY_LENGTH = None
+DISPLAY_LENGTH = 15
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
