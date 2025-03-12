@@ -9,14 +9,16 @@ def match_buy_order(state: TradingState, next_state: TradingState, order: Order)
     market_trades = next_state.market_trades if next_state else None
     remaining_quantity = order.quantity
     order_depth = state.order_depths.get(order.symbol)
+    if state.timestamp == 1200:
+        print("Sell orders:", order_depth.sell_orders)
     
     # First fill with order depth
     if order_depth and order_depth.sell_orders:
         eligible_prices = sorted([price for price in order_depth.sell_orders.keys() if price <= order.price])
-        
+        print(eligible_prices)
         for price in eligible_prices:
-            available = order_depth.sell_orders[price]
-            if available <= 0:
+            available = abs(order_depth.sell_orders[price])
+            if available == 0:
                 continue
             matched_quantity = min(remaining_quantity, available)
             trades.append(
@@ -33,6 +35,8 @@ def match_buy_order(state: TradingState, next_state: TradingState, order: Order)
             remaining_quantity -= matched_quantity
             if remaining_quantity == 0:
                 return trades
+    if state.timestamp == 1200:
+        print("Trades:", trades)
     # print(remaining_quantity)
     # print("Trades:", trades)
     # Fill any remaining quantity with market trades

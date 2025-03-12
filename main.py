@@ -8,7 +8,7 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 
 VERBOSE = False
-DISPLAY_LENGTH = 15
+DISPLAY_LENGTH = None
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
@@ -100,6 +100,8 @@ def main() -> None:
             
             # Process each order by matching against order depths
             for order in orders_list:
+                if state.timestamp == 1200:
+                    print("My order:", order)
                 trades_executed = []
                 if order.quantity > 0: # buy order
                     trades_executed = match_buy_order(state, next_state, order)
