@@ -1,6 +1,6 @@
-# :fire: Prosperity Backtester :tada:
+# :fire:  Prosperity Backtester  :fire:
 
-Team Three Kingdoms' in-house Prosperity backtester.
+:tada: Team Three Kingdoms' in-house Prosperity backtester.
 
 ## Files & Directories
 
