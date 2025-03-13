@@ -1,4 +1,4 @@
-# :fire:  Prosperity Backtester  :fire:
+# :beach_umbrella:  Prosperity Backtester  :palm_tree:
 
 :tada: Team Three Kingdoms' in-house Prosperity backtester.
 
