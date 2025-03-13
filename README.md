@@ -1,6 +1,6 @@
 # Prosperity Backtester
 
-A simple backtesting framework for trading algorithms.
+Team Three Kingdoms' in-house Prosperity backtester.
 
 ## Files & Directories
 
@@ -21,7 +21,7 @@ A simple backtesting framework for trading algorithms.
 
 ## How to Use
 
-Provide the following command-line arguments in order. If one or more arguments are missing, the flags are interpreted based on their positions and the remaining parameters are set to default values. If no arguments are provided, it defaults to testing `algorithms/algo.py` on round 0 data. For meaningful results, the first two arguments (round number and algorithm path) are usually needed.
+To run the backtester from the command line, run the command `python main.py` followed by the following command-line arguments *in order*. If one or more arguments are missing, the flags are interpreted based on their positions and the remaining parameters are set to default values. If no arguments are provided, it defaults to testing `algorithms/algo.py` on round 0 data. For meaningful results, the first two arguments (round number and algorithm path) are usually needed.
 
 1. **Round number**  
    - **Description:** The round of data to backtest.
