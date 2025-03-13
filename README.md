@@ -51,3 +51,11 @@ python main.py 3 algorithms/猴子吃香蕉.py 314 1
 
 python main.py 5 algorithms/啦啦啦啦啦.py 100 否
 ```
+
+## Backtest Output
+
+The backtest output is stored in the `results/round-x` directory and includes the following three files:
+
+1. **`orderbook.csv`** – A CSV file containing the order book and PnL at every timestamp.
+2. **`pnl_over_time.png`** – A plot of PnL over time.
+3. **`trade_history.csv`** – A CSV file containing the history of all of *your own* trades.
