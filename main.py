@@ -336,11 +336,11 @@ if __name__ == "__main__":
     # Validate verbose flag
     if len(sys.argv) > 4:
         verbose_arg = sys.argv[4].lower()
-        valid_verbose = ["true", "1", "yes", "false", "0", "no"]
+        valid_verbose = ["true", "false", "1", "0", "yes", "no", "是", "否"]
         if verbose_arg not in valid_verbose:
             print(f"Invalid verbose flag provided: {sys.argv[4]}. Use true/false, 1/0, yes/no.")
             sys.exit(1)
-        VERBOSE = verbose_arg in ["true", "1", "yes"]
+        VERBOSE = verbose_arg in ["true", "1", "yes", "是"]
     else:
         VERBOSE = False
 
