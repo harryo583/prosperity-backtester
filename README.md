@@ -1,4 +1,4 @@
-# Prosperity Backtester
+# :fire: Prosperity Backtester :tada:
 
 Team Three Kingdoms' in-house Prosperity backtester.
 
@@ -47,7 +47,7 @@ Execute these commands from the project root repository:
 ```bash
 python main.py 1 algorithms/monkeys_eat_bananas.py
 
-python main.py 3 algorithms/ 314 1
+python main.py 3 algorithms/猴子吃香蕉.py 314 1
 
-python main.py 5 algorithms/ 100 否
+python main.py 5 algorithms/啦啦啦啦啦.py 100 否
 ```
