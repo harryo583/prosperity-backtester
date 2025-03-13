@@ -1,6 +1,6 @@
-# :beach_umbrella:  Prosperity Backtester  :palm_tree:
+# :beach_umbrella:  IMC Prosperity Backtester  :palm_tree:
 
-:tada: Team Three Kingdoms' in-house Prosperity backtester.
+:tada: Three Kingdoms' in-house backtester for IMC Prosperity 3.
 
 ## Files & Directories
 
@@ -24,20 +24,20 @@
 To run the backtester from the command line, run the command `python main.py` followed by the following command-line arguments *in order*. If one or more arguments are missing, the flags are interpreted based on their positions and the remaining parameters are set to default values. If no arguments are provided, it defaults to testing `algorithms/algo.py` on round 0 data. For meaningful results, the first two arguments (round number and algorithm path) are usually needed.
 
 1. **Round number**  
-   - **Description:** The round of data to backtest.
-   - **Constraints:** Integer between 0 and 5 (inclusive).
+   - **Description:** the round of data to backtest on.
+   - **Constraints:** integer between 0 and 5 (inclusive).
    - **Default:** `0`
 2. **Algorithm path**  
-   - **Description:** The file path to your algorithm.
-   - **Constraints:** Must be a valid file path.
+   - **Description:** the file path to your algorithm.
+   - **Constraints:** valid file path.
    - **Default:** `algorithms/algo.py` (an empty placeholder).
 3. **Log length**  
-   - **Description:** The length of the logs.
-   - **Constraints:** Positive integer.
-   - **Default:** `all` (logs everything).
+   - **Description:** the length of the logs.
+   - **Constraints:** positive integer.
+   - **Default:** `None` (logs everything).
 4. **Verbose**  
-   - **Description:** Determines whether to print detailed information to the command line.
-   - **Constraints:** Accepts one of: `0`, `1`, `"true"`, `"false"`, `"yes"`, `"no"`, `"是"`, `"否"` (both `是` and `否` work!).
+   - **Description:** determines whether to print detailed information to the command line.
+   - **Constraints:** accepts one of: `0`, `1`, `"true"`, `"false"`, `"yes"`, `"no"`, `"是"`, `"否"` (both `是` and `否` work!).
    - **Default:** `否`
 
 ## Example Commands
