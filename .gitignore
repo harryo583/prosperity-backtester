@@ -13,3 +13,4 @@ tempcoderunnerfile*
 backtests/
 results/
 algorithms/
+plots/
