@@ -137,8 +137,10 @@ def main(algo_path=None) -> None:
     trader_module = parse_algorithm(algo_path)
     
     trader = trader_module.Trader()  # trader instance
-    trader.cash = 0  # initial cash
-    trader.pnl = 0  # initial pnl
+    trader.cash = {prod: 0 for prod in PRODUCTS}  # initial cash
+    trader.pnl = {prod: 0 for prod in PRODUCTS}  # initial pnl
+    trader.aggregate_cash = 0
+    trader.aggregate_pnl = 0
     
     # Containers for exporting CSVs and tracking PnL
     market_conditions = []  # list of dicts for market conditions snapshot
@@ -181,12 +183,16 @@ def main(algo_path=None) -> None:
                     trades_executed = match_buy_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) + total_filled  # update trader position
-                    trader.cash -= sum(trade.price * trade.quantity for trade in trades_executed)  # update cash
+                    cash_change = -sum(trade.price * trade.quantity for trade in trades_executed)
+                    trader.cash[product] += cash_change # update cash
+                    trader.aggregate_cash += cash_change # update cash
                 elif order.quantity < 0:  # sell order
                     trades_executed = match_sell_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) - total_filled  # update trader position
-                    trader.cash += sum(trade.price * trade.quantity for trade in trades_executed)  # update cash
+                    cash_change = sum(trade.price * trade.quantity for trade in trades_executed)
+                    trader.cash[product] += cash_change
+                    trader.aggregate_cash += cash_change # update cash
                 
                 # Record each executed trade in trade_history_list
                 for trade in trades_executed:
@@ -209,18 +215,21 @@ def main(algo_path=None) -> None:
                         for trade in trades_executed:
                             print_self_trade(trade)
         
-        trader.pnl = trader.cash
+        trader.pnl = trader.cash.copy()
+        trader.aggregate_pnl = trader.aggregate_cash
+        
         for product, pos in position.items():
             mid_price = (max(state.order_depths[product].buy_orders) + min(state.order_depths[product].sell_orders)) / 2
-            trader.pnl += pos * mid_price
-                    
+            trader.pnl[product] += pos * mid_price
+            trader.aggregate_pnl += pos * mid_price
+            
         if traded and timestamp < CML_LOG_LENGTH * 100:
             print(f"Positions: {state.position}")
-            print(f"Cash: {trader.cash}\n")
-            print(f"PNL: {trader.pnl}\n")
+            print(f"Cash: {trader.aggregate_cash}\n")
+            print(f"PNL: {trader.aggregate_pnl}\n")
         
         # Record pnl over time
-        pnl_over_time.append((timestamp, trader.pnl))
+        pnl_over_time.append((timestamp, trader.aggregate_pnl))
         
         # Record market condition snapshot for each product
         for product in PRODUCTS:
@@ -264,7 +273,7 @@ def main(algo_path=None) -> None:
                 "ask_price_3": ask_price_3,
                 "ask_volume_3": ask_vol_3,
                 "mid_price": mid_price,
-                "profit_and_loss": trader.pnl
+                "profit_and_loss": trader.aggregate_pnl
             })
     
     # Export market conditions and trade history to CSV files with semicolon delimiter
@@ -281,7 +290,7 @@ def main(algo_path=None) -> None:
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv(f"results/round-{round_number}/trade_history.csv", sep=";", index=False)
     
-    print("Overall PNL:", trader.pnl)
+    print("Overall PNL:", trader.aggregate_pnl)
     print("Exported orderbook.csv and trade_history.csv.")
     
     plot_pnl(pnl_over_time)  # call plotting function
