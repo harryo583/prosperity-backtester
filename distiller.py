@@ -1,7 +1,8 @@
-# extractor.py
-
 import json
+import os
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 from json import JSONDecoder
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
@@ -57,9 +58,7 @@ PRINT_TRADE_HISTORY = True
     - Correlation matrix
     - Histograms
     - Outlier analysis
-
 """
-
 
 ########################################################################
 # Parse Data
@@ -249,6 +248,7 @@ product_dfs = {
 ########################################################################
 
 trade_product_dfs = {}
+trade_df = pd.DataFrame()  # initialize in case no valid trade history is parsed
 
 if trade_history_lines:
     trade_history_text = " ".join(trade_history_lines)
@@ -265,6 +265,113 @@ if trade_history_lines:
         }
     except json.JSONDecodeError as e:
         print("Error parsing trade history:", e)
+
+########################################################################
+# Analysis and Plotting Functions
+########################################################################
+
+def plot_cumulative_pnl(product, df):
+    """Plot cumulative PNL for a given product using the activities log."""
+    df = df.copy()
+    df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
+    df['pnl'] = pd.to_numeric(df['pnl'], errors='coerce')
+    df.sort_values('timestamp', inplace=True)
+    df['cumulative_pnl'] = df['pnl'].cumsum()
+    plt.figure()
+    plt.plot(df['timestamp'], df['cumulative_pnl'], marker='o')
+    plt.title(f'Cumulative PNL for {product}')
+    plt.xlabel('Timestamp')
+    plt.ylabel('Cumulative PNL')
+    plt.grid(True)
+    plt.tight_layout()
+    file_path = os.path.join("plots", f"cumulative_pnl_{product}.png")
+    plt.savefig(file_path)
+    plt.close()
+    print(f"Cumulative PNL plot saved for {product} at {file_path}")
+
+def plot_bid_ask_spread(product, df):
+    """Plot bid-ask spread vs. time for a given product."""
+    df = df.copy()
+    df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
+    df['bid_price_1'] = pd.to_numeric(df['bid_price_1'], errors='coerce')
+    df['ask_price_1'] = pd.to_numeric(df['ask_price_1'], errors='coerce')
+    df.sort_values('timestamp', inplace=True)
+    df['spread'] = df['ask_price_1'] - df['bid_price_1']
+    plt.figure()
+    plt.plot(df['timestamp'], df['spread'], marker='x', linestyle='--')
+    plt.title(f'Bid-Ask Spread for {product}')
+    plt.xlabel('Timestamp')
+    plt.ylabel('Spread')
+    plt.grid(True)
+    plt.tight_layout()
+    file_path = os.path.join("plots", f"bid_ask_spread_{product}.png")
+    plt.savefig(file_path)
+    plt.close()
+    print(f"Bid-Ask Spread plot saved for {product} at {file_path}")
+
+def plot_intertrade_intervals(symbol, df):
+    """Plot histogram of intertrade time intervals for a given symbol."""
+    df = df.copy()
+    df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
+    df.sort_values('timestamp', inplace=True)
+    if len(df) < 2:
+        print(f"Not enough trades for {symbol} to compute intertrade intervals.")
+        return
+    intervals = df['timestamp'].diff().dropna()
+    plt.figure()
+    plt.hist(intervals, bins=10)
+    plt.title(f'Intertrade Time Intervals for {symbol}')
+    plt.xlabel('Time Interval')
+    plt.ylabel('Frequency')
+    plt.grid(True)
+    plt.tight_layout()
+    file_path = os.path.join("plots", f"intertrade_intervals_{symbol}.png")
+    plt.savefig(file_path)
+    plt.close()
+    print(f"Intertrade intervals histogram saved for {symbol} at {file_path}")
+
+def plot_trade_statistics(trade_stats):
+    """Plot trade count, average trade size, and variance per symbol as bar charts."""
+    symbols = list(trade_stats.keys())
+    counts = [trade_stats[s]['count'] for s in symbols]
+    avg_sizes = [trade_stats[s]['avg_size'] for s in symbols]
+    var_sizes = [trade_stats[s]['var_size'] for s in symbols]
+
+    # Bar chart for trade count
+    plt.figure()
+    plt.bar(symbols, counts)
+    plt.title("Trade Count per Symbol")
+    plt.xlabel("Symbol")
+    plt.ylabel("Trade Count")
+    plt.tight_layout()
+    file_path = os.path.join("plots", "trade_count.png")
+    plt.savefig(file_path)
+    plt.close()
+    print(f"Trade count plot saved at {file_path}")
+
+    # Bar chart for average trade size
+    plt.figure()
+    plt.bar(symbols, avg_sizes)
+    plt.title("Average Trade Size per Symbol")
+    plt.xlabel("Symbol")
+    plt.ylabel("Average Trade Size")
+    plt.tight_layout()
+    file_path = os.path.join("plots", "avg_trade_size.png")
+    plt.savefig(file_path)
+    plt.close()
+    print(f"Average trade size plot saved at {file_path}")
+
+    # Bar chart for trade size variance
+    plt.figure()
+    plt.bar(symbols, var_sizes)
+    plt.title("Trade Size Variance per Symbol")
+    plt.xlabel("Symbol")
+    plt.ylabel("Variance")
+    plt.tight_layout()
+    file_path = os.path.join("plots", "trade_size_variance.png")
+    plt.savefig(file_path)
+    plt.close()
+    print(f"Trade size variance plot saved at {file_path}")
 
 ########################################################################
 # main()
@@ -294,3 +401,45 @@ if __name__ == "__main__":
             print("\n------------------------------------------------------------------------------------------------------------\n")
             print(f"{symbol}\n")
             print(df.head(10), "\n")
+    
+    # Create plots folder if it doesn't exist
+    if not os.path.exists("plots"):
+         os.makedirs("plots")
+         print("Created 'plots' directory.")
+
+    # Analysis and plotting
+    print("\n============================================================================================================\n")
+    print("Performing Analysis and Plotting:")
+
+    # Plot cumulative PNL and bid-ask spread for each product (from activity logs)
+    for product, df in product_dfs.items():
+         # Ensure numeric types for plotting
+         df['pnl'] = pd.to_numeric(df['pnl'], errors='coerce')
+         df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
+         plot_cumulative_pnl(product, df)
+         plot_bid_ask_spread(product, df)
+    
+    # Compute and print trade statistics from trade history; plot intertrade intervals and summary stats
+    trade_stats = {}
+    if not trade_df.empty:
+         for symbol in trade_df['symbol'].unique():
+              symbol_df = trade_df[trade_df['symbol'] == symbol]
+              count = len(symbol_df)
+              avg_size = symbol_df['quantity'].mean()
+              var_size = symbol_df['quantity'].var()
+              trade_stats[symbol] = {
+                  'count': count,
+                  'avg_size': avg_size,
+                  'var_size': var_size
+              }
+              print(f"\nTrade Statistics for {symbol}:")
+              print(f"  Total trades: {count}")
+              print(f"  Average trade size: {avg_size}")
+              print(f"  Trade size variance: {var_size}")
+              plot_intertrade_intervals(symbol, symbol_df)
+         # Plot aggregated trade statistics
+         plot_trade_statistics(trade_stats)
+    else:
+         print("No trade history data available for analysis.")
+
+    print("\nAnalysis and plotting completed.")
