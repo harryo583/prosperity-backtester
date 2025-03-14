@@ -9,7 +9,57 @@ PRINT_TRADING_STATES = True
 PRINT_ACTIVITY_LOGS = True
 PRINT_TRADE_HISTORY = True
 
-# Wanted information: 
+"""
+1. Trade execution & order flow analysis
+    - Trade frequency & volume
+        - Count of trades (me & market)
+        - Average trade size
+        - Variance of trade size
+    - Price efficiency & slippage
+        - Execution price & midprice
+        - Trade impact
+    - Timing analysis
+        - Intertrade time intervals
+    - Quote quality
+        - Quote to trade ratio
+        - How often market moves toward you
+        - Are you frequently stale?
+    - Us vs bots
+        - How do our trades compare with market trades?
+2. Holding & inventory metrics
+    - Holding time distribution & mean
+    - Position management
+        - Inventory turnover
+        - Position concentration
+    - PNL volatility & variance
+    - Inventory risk (market maker)
+3. PNL analysis
+    - Cumulative & periodic PNL
+        - Cumulative PNL curve (plot)
+        - PNL per product (plot)
+    - Trade profitability
+        - Average profit per trade
+        - Win/loss ratio (profitable vs losing trades)
+        - Risk-adjusted returns
+4. Orderbook & market microstructure
+    - Liquidity & depth
+        - Bid ask spread vs time plot
+        - Orderbook width & depth (volume of top three levels)
+        - Volatility (bid and ask prices & volume volatility)
+    - Imbalance metrics
+        - Order flow imbalance (bid vs ask volumes)
+        - Midprice stability (variance or sdv of midprice over time)
+    - Bots logic NOTE
+        - Can we identify the logic of the bots?
+        - Can we identify if there is a big market maker?
+5. Statistical analysis
+    - Correlation & regression
+    - Correlation matrix
+    - Histograms
+    - Outlier analysis
+
+"""
+
 
 ########################################################################
 # Parse Data
