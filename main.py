@@ -290,7 +290,9 @@ def main(algo_path=None) -> None:
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv(f"results/round-{round_number}/trade_history.csv", sep=";", index=False)
     
-    print("Overall PNL:", trader.aggregate_pnl)
+    print("PNL:", trader.aggregate_pnl)
+    for product, pnl in trader.pnl.items():
+        print(f"    {product}: {pnl}")
     print("Exported orderbook.csv and trade_history.csv.")
     
     plot_pnl(pnl_over_time)  # call plotting function
