@@ -131,7 +131,6 @@ for entry in sandbox_json_objects:
     if "lambdaLog" in entry:
         lambda_log_str = entry["lambdaLog"].strip()
         if not lambda_log_str:
-            # Skip entries with empty lambdaLog
             continue
         try:
             lambda_log = json.loads(lambda_log_str)
@@ -281,7 +280,7 @@ def plot_cumulative_pnl(product, df):
     df.sort_values('timestamp', inplace=True)
     df['cumulative_pnl'] = df['pnl'].cumsum()
     plt.figure()
-    plt.plot(df['timestamp'], df['cumulative_pnl'], marker='o')
+    plt.plot(df['timestamp'], df['cumulative_pnl'], marker='o', markersize=3)
     plt.title(f'Cumulative PNL for {product}')
     plt.xlabel('Timestamp')
     plt.ylabel('Cumulative PNL')
