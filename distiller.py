@@ -129,8 +129,12 @@ trading_states = []
 for entry in sandbox_json_objects:
     entry.pop("sandboxLog", None)  # remove because it's empty
     if "lambdaLog" in entry:
+        lambda_log_str = entry["lambdaLog"].strip()
+        if not lambda_log_str:
+            # Skip entries with empty lambdaLog
+            continue
         try:
-            lambda_log = json.loads(entry["lambdaLog"])
+            lambda_log = json.loads(lambda_log_str)
         except json.JSONDecodeError as e:
             print("Error parsing lambdaLog:", e)
             continue
@@ -155,7 +159,7 @@ for entry in sandbox_json_objects:
         for sym, trades in lambda_log.get("market_trades", {}).items():
             market_trades[sym] = []
             for t in trades:
-                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100:  # filter for past timestep's market trades
+                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100:
                     market_trades[sym].append(
                         Trade(symbol=t["symbol"],
                               price=int(t["price"]),
@@ -186,7 +190,6 @@ for entry in sandbox_json_objects:
         # Build observations
         obs_data = lambda_log.get("observations", {})
         plain_obs_raw = obs_data.get("plainValueObservations", {})
-        # Convert plain observations to ints
         plain_obs = {prod: int(val) for prod, val in plain_obs_raw.items()}
         conv_obs_raw = obs_data.get("conversionObservations", {})
         conv_obs = {}
