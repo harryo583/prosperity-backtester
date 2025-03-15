@@ -149,7 +149,7 @@ def main(algo_path=None) -> None:
     
     # Variables to keep track of trader logs
     position = {prod: 0 for prod in PRODUCTS}
-    traderData = None
+    traderData = ""
 
     for i, state in enumerate(trading_states):
         next_state = trading_states[i + 1] if i < len(trading_states) - 1 else None
