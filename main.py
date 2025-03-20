@@ -167,7 +167,7 @@ def main(algo_path=None) -> None:
         traded = False
         all_trades_executed = []
         
-        if CML_LOG_LENGTH and timestamp > CML_LOG_LENGTH * 100:
+        if LOG_LENGTH and timestamp > LOG_LENGTH * 100:
             break
 
         # Update the state with newest trader data
@@ -230,7 +230,7 @@ def main(algo_path=None) -> None:
                 if trades_executed:
                     all_trades_executed.extend(trades_executed)
                 
-                if CML_LOG_LENGTH and trades_executed and timestamp < CML_LOG_LENGTH * 100:
+                if LOG_LENGTH and trades_executed and timestamp < LOG_LENGTH * 100:
                     traded = True
                     if VERBOSE:
                         print(f"Executed trades for order {order}: {trades_executed}")
@@ -243,7 +243,7 @@ def main(algo_path=None) -> None:
             trader.pnl[product] += pos * mid_price
             trader.aggregate_pnl += pos * mid_price
             
-        if traded and CML_LOG_LENGTH and timestamp < CML_LOG_LENGTH * 100:
+        if traded and LOG_LENGTH and timestamp < LOG_LENGTH * 100:
             print(f"[{timestamp}]")
             for trade in all_trades_executed:
                 print_self_trade(trade)
@@ -389,14 +389,14 @@ if __name__ == "__main__":
     # Validate log length
     if len(sys.argv) > 3:
         try:
-            CML_LOG_LENGTH = int(sys.argv[3])
-            if CML_LOG_LENGTH <= 0:
+            LOG_LENGTH = int(sys.argv[3])
+            if LOG_LENGTH <= 0:
                 raise ValueError("Log length must be a positive integer.")
         except ValueError as e:
             print(f"Invalid log length provided: {sys.argv[3]}. {e}")
             sys.exit(1)
     else:
-        CML_LOG_LENGTH = None
+        LOG_LENGTH = None
 
     # Validate verbose flag
     if len(sys.argv) > 4:
