@@ -174,12 +174,15 @@ def main(algo_path=None) -> None:
         state.position = position
         state.traderData = traderData  # traderData from previous run
         
-        with contextlib.redirect_stdout(io.StringIO()): # suppress any printing
+        lambda_buffer = io.StringIO()
+        
+        with contextlib.redirect_stdout(lambda_buffer):  # redirect stdout to buffer
             result, conversions, traderData = trader.run(state)
+        lambda_log = lambda_buffer.getvalue()
         
         sandbox_logs.append({
             "sandboxLog": "",
-            "lambdaLog": traderData,
+            "lambdaLog": lambda_log,
             "timestamp": timestamp
         })
         
