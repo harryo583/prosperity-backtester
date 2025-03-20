@@ -324,7 +324,7 @@ def main(algo_path=None) -> None:
         # Sandbox logs section
         f.write("Sandbox logs:\n")
         for log in sandbox_logs:
-            f.write(json.dumps(log) + "\n")
+            f.write(json.dumps(log, indent=2) + "\n")
         f.write("\n")
         
         # Activities logs section
