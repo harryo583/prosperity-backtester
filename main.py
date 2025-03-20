@@ -1,11 +1,15 @@
-import pandas as pd
+# main.py
+
+import io
 import sys
+import json
+import contextlib
+import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
-import json
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
@@ -155,6 +159,7 @@ def main(algo_path=None) -> None:
         next_state = trading_states[i + 1] if i < len(trading_states) - 1 else None
         timestamp = state.timestamp
         traded = False
+        all_trades_executed = []
         
         if CML_LOG_LENGTH and timestamp > CML_LOG_LENGTH * 100:
             break
@@ -163,19 +168,20 @@ def main(algo_path=None) -> None:
         state.position = position
         state.traderData = traderData  # traderData from previous run
         
-        result, conversions, traderData = trader.run(state)
+        with contextlib.redirect_stdout(io.StringIO()): # suppress any printing
+            result, conversions, traderData = trader.run(state)
         
         for product, orders_list in result.items():
             current_position = position.get(product, 0)
             total_buy = sum(order.quantity for order in orders_list if order.quantity > 0)
             total_sell = sum(-order.quantity for order in orders_list if order.quantity < 0)
             pos_limit = POSITION_LIMITS.get(product, 0)
-            
+
             if current_position + total_buy > pos_limit or current_position - total_sell < -pos_limit:
                 if VERBOSE:
                     print(f"[{timestamp}] Position limit exceeded for {product}. Cancelling all orders.")
                 continue
-            
+
             # Process each order by matching against order depths
             for order in orders_list:
                 trades_executed = []
@@ -206,14 +212,14 @@ def main(algo_path=None) -> None:
                         "quantity": trade.quantity
                     })
                 
+                if trades_executed:
+                    all_trades_executed.extend(trades_executed)
+                
                 if CML_LOG_LENGTH and trades_executed and timestamp < CML_LOG_LENGTH * 100:
                     traded = True
-                    print(f"[{timestamp}]")
                     if VERBOSE:
                         print(f"Executed trades for order {order}: {trades_executed}")
-                    else:
-                        for trade in trades_executed:
-                            print_self_trade(trade)
+                    
         
         trader.pnl = trader.cash.copy()
         trader.aggregate_pnl = trader.aggregate_cash
@@ -223,9 +229,12 @@ def main(algo_path=None) -> None:
             trader.pnl[product] += pos * mid_price
             trader.aggregate_pnl += pos * mid_price
             
-        if traded and timestamp < CML_LOG_LENGTH * 100:
+        if traded and CML_LOG_LENGTH and timestamp < CML_LOG_LENGTH * 100:
+            print(f"[{timestamp}]")
+            for trade in all_trades_executed:
+                print_self_trade(trade)
             print(f"Positions: {state.position}")
-            print(f"Cash: {trader.aggregate_cash}\n")
+            print(f"Cash: {trader.aggregate_cash}")
             print(f"PNL: {trader.aggregate_pnl}\n")
         
         # Record pnl over time
@@ -290,9 +299,9 @@ def main(algo_path=None) -> None:
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv(f"results/round-{round_number}/trade_history.csv", sep=";", index=False)
     
-    print("PNL:", trader.aggregate_pnl)
+    print("TOTAL PNL:", trader.aggregate_pnl)
     for product, pnl in trader.pnl.items():
-        print(f"    {product}: {pnl}")
+        print(f"  {product}: {pnl}")
     print("Exported orderbook.csv and trade_history.csv.")
     
     plot_pnl(pnl_over_time)  # call plotting function
