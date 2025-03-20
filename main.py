@@ -17,7 +17,6 @@ POSITION_LIMITS = {
     "KELP": 100
 }
 
-
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
     with open(log_path, "r") as f:
@@ -298,11 +297,12 @@ def main(algo_path=None) -> None:
     trade_history_df = pd.DataFrame(trade_history_list)
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv(f"results/round-{round_number}/trade_history.csv", sep=";", index=False)
-    
+    print("-----------------------------------------------------------------------------------")
     print("TOTAL PNL:", trader.aggregate_pnl)
     for product, pnl in trader.pnl.items():
         print(f"  {product}: {pnl}")
     print("Exported orderbook.csv and trade_history.csv.")
+    print("-----------------------------------------------------------------------------------")
     
     plot_pnl(pnl_over_time)  # call plotting function
 
