@@ -11,11 +11,13 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
+
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 100,
     "KELP": 100
 }
+
 
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
@@ -95,6 +97,7 @@ def load_trading_states(log_path: str):
     return [convert_trading_state(d) for d in trading_states_data]
 
 
+
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
     if not algorithm_path.is_file():
@@ -104,11 +107,13 @@ def parse_algorithm(algo_path: str):
     return import_module(algorithm_path.stem)
 
 
+
 def print_self_trade(trade):
     if trade.seller == "SUBMISSION":
         print(f"Sold {trade.quantity} {trade.symbol} at {trade.price}.")
     elif trade.buyer == "SUBMISSION":
         print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
+
 
 
 def plot_pnl(pnl_over_time):
@@ -132,6 +137,7 @@ def plot_pnl(pnl_over_time):
     plt.savefig(f"results/round-{round_number}/pnl_over_time.png")
 
 
+
 def main(algo_path=None) -> None:
     if not algo_path:
         print("No algo path provided, using algorithms/algo.py")
@@ -148,6 +154,7 @@ def main(algo_path=None) -> None:
     # Containers for exporting CSVs and tracking PnL
     market_conditions = []  # list of dicts for market conditions snapshot
     trade_history_list = []  # list of dicts for each trade
+    sandbox_logs = [] # list to store sandbox logs
     pnl_over_time = []  # list of (timestamp, pnl)
     
     # Variables to keep track of trader logs
@@ -169,6 +176,12 @@ def main(algo_path=None) -> None:
         
         with contextlib.redirect_stdout(io.StringIO()): # suppress any printing
             result, conversions, traderData = trader.run(state)
+        
+        sandbox_logs.append({
+            "sandboxLog": "",
+            "lambdaLog": traderData,
+            "timestamp": timestamp
+        })
         
         for product, orders_list in result.items():
             current_position = position.get(product, 0)
@@ -218,7 +231,6 @@ def main(algo_path=None) -> None:
                     traded = True
                     if VERBOSE:
                         print(f"Executed trades for order {order}: {trades_executed}")
-                    
         
         trader.pnl = trader.cash.copy()
         trader.aggregate_pnl = trader.aggregate_cash
@@ -303,6 +315,36 @@ def main(algo_path=None) -> None:
         print(f"  {product}: {pnl}")
     print("Exported orderbook.csv and trade_history.csv.")
     print("-----------------------------------------------------------------------------------")
+    
+    combined_logs_path = f"results/round-{round_number}/combined_results.log"
+    with open(combined_logs_path, "w") as f:
+        # Sandbox logs section
+        f.write("Sandbox logs:\n")
+        for log in sandbox_logs:
+            f.write(json.dumps(log) + "\n")
+        f.write("\n")
+        
+        # Activities logs section
+        f.write("Activities log:\n")
+        header = ("day;timestamp;product;bid_price_1;bid_volume_1;bid_price_2;bid_volume_2;"
+                  "bid_price_3;bid_volume_3;ask_price_1;ask_volume_1;ask_price_2;ask_volume_2;"
+                  "ask_price_3;ask_volume_3;mid_price;profit_and_loss\n")
+        f.write(header)
+        for cond in market_conditions:
+            line = (f"{cond['day']};{cond['timestamp']};{cond['product']};"
+                    f"{cond['bid_price_1']};{cond['bid_volume_1']};"
+                    f"{cond['bid_price_2']};{cond['bid_volume_2']};"
+                    f"{cond['bid_price_3']};{cond['bid_volume_3']};"
+                    f"{cond['ask_price_1']};{cond['ask_volume_1']};"
+                    f"{cond['ask_price_2']};{cond['ask_volume_2']};"
+                    f"{cond['ask_price_3']};{cond['ask_volume_3']};"
+                    f"{cond['mid_price']};{cond['profit_and_loss']}\n")
+            f.write(line)
+        f.write("\n")
+        
+        # Trade history section
+        f.write("Trade History:\n")
+        f.write(json.dumps(trade_history_list, indent=2))
     
     plot_pnl(pnl_over_time)  # call plotting function
 
