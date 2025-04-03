@@ -10,7 +10,7 @@ tempcoderunnerfile*
 
 
 # Ignore backtest results and algorithms
-# backtests/
-# results/
-# algorithms/
-# plots/
+backtests/
+results/
+algorithms/
+plots/
