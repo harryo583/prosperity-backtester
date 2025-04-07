@@ -4,12 +4,14 @@ import math
 
 KELP = "KELP"
 RESIN = "RAINFOREST_RESIN"
+SQUID_INK = "SQUID_INK"
 
 BUY = "BUY"
 SELL = "SELL"
 
 POS_LIMIT_KELP = 50
 POS_LIMIT_RESIN = 50
+POS_LIMIT_SQUID_INK = 50
 
 class Trader:
     

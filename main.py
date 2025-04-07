@@ -12,11 +12,13 @@ from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
 ROUND_NUMBER = 1
-PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
+PRODUCTS = ["RAINFOREST_RESIN", "KELP", "SQUID_INK"]
 POSITION_LIMITS = {
-    "RAINFOREST_RESIN": 100,
-    "KELP": 100
+    "RAINFOREST_RESIN": 50,
+    "KELP": 50,
+    "SQUID_INK": 50
 }
+
 
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""

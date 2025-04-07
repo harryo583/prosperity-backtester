@@ -9,7 +9,7 @@ PRINT_TRADING_STATES = True
 PRINT_ACTIVITY_LOGS = True
 PRINT_TRADE_HISTORY = True
 
-round_number = 0
+ROUND_NUMBER = 1
 
 ########################################################################
 # Parse Data
@@ -40,7 +40,7 @@ trade_history_lines = []
 activities_header = None
 current_section = None
 
-with open(f"logs/round-{round_number}/logs.log", 'r') as f:
+with open(f"logs/round-{ROUND_NUMBER}/logs.log", 'r') as f:
     for line in f:
         line_strip = line.strip()
         if not line_strip:
@@ -172,7 +172,7 @@ for entry in sandbox_json_objects:
 ########################################################################
 # Convert each TradingState into a dictionary (via its JSON representation)
 trading_states_list = [json.loads(state.toJSON()) for state in trading_states]
-with open(f"data/round-{round_number}/trading_states.json", "w") as ts_file:
+with open(f"post-data/round-{ROUND_NUMBER}/trading_states.json", "w") as ts_file:
     json.dump(trading_states_list, ts_file, indent=2)
 
 ########################################################################
