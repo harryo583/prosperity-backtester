@@ -16,7 +16,6 @@ class Trader:
     def __init__(self):
         pass
     
-    
     def clear_position_order(
         self,
         orders: List[Order],
