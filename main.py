@@ -11,13 +11,14 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
-
+ROUND_NUMBER = 1
 PRODUCTS = ["RAINFOREST_RESIN", "KELP"]
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 100,
     "KELP": 100
 }
 
+day_number = 0
 
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
@@ -134,7 +135,7 @@ def plot_pnl(pnl_over_time):
     plt.title("PnL Over Time")
     plt.xticks(rotation=45)
     plt.tight_layout()
-    plt.savefig(f"results/round-{round_number}/pnl_over_time.png")
+    plt.savefig(f"results/round-{ROUND_NUMBER}/day-{day_number}/pnl_over_time.png")
 
 
 
@@ -307,11 +308,11 @@ def main(algo_path=None) -> None:
         "ask_price_1", "ask_volume_1", "ask_price_2", "ask_volume_2", "ask_price_3", "ask_volume_3",
         "mid_price", "profit_and_loss"
     ]]
-    market_conditions_df.to_csv(f"results/round-{round_number}/orderbook.csv", sep=";", index=False)
+    market_conditions_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/orderbook.csv", sep=";", index=False)
     
     trade_history_df = pd.DataFrame(trade_history_list)
     trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
-    trade_history_df.to_csv(f"results/round-{round_number}/trade_history.csv", sep=";", index=False)
+    trade_history_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/trade_history.csv", sep=";", index=False)
     print("-----------------------------------------------------------------------------------")
     print("TOTAL PNL:", trader.aggregate_pnl)
     for product, pnl in trader.pnl.items():
@@ -319,7 +320,7 @@ def main(algo_path=None) -> None:
     print("Exported orderbook.csv and trade_history.csv.")
     print("-----------------------------------------------------------------------------------")
     
-    combined_logs_path = f"results/round-{round_number}/combined_results.log"
+    combined_logs_path = f"results/round-{ROUND_NUMBER}/day-{day_number}/combined_results.log"
     with open(combined_logs_path, "w") as f:
         # Sandbox logs section
         f.write("Sandbox logs:\n")
@@ -362,14 +363,14 @@ if __name__ == "__main__":
     # Validate round number
     if len(sys.argv) > 1:
         try:
-            round_number = int(sys.argv[1])
-            if round_number < 0 or round_number > 5:
-                raise ValueError("Round number must be between 0 and 5.")
+            day_number = int(sys.argv[1])
+            if day_number < 0 or day_number > 2:
+                raise ValueError("Round number must be between 0 and 3.")
         except ValueError as e:
             print(f"Invalid round number provided: {sys.argv[1]}. {e}")
             sys.exit(1)
     else:
-        round_number = 0
+        day_number = 0
 
     # Validate algorithm path
     if len(sys.argv) > 2:
@@ -410,7 +411,7 @@ if __name__ == "__main__":
         VERBOSE = False
 
     # Check that the trading states file exists
-    trading_states_file = f"data/round-{round_number}/trading_states.json"
+    trading_states_file = f"data/round-{ROUND_NUMBER}/day-{day_number}/trading_states.json"
     if not Path(trading_states_file).expanduser().resolve().is_file():
         print(f"Trading states file not found: {trading_states_file}")
         sys.exit(1)
