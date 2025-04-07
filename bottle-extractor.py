@@ -1,253 +1,139 @@
-# extractor.py
+# bottle-extractor.py
 
 import json
 import pandas as pd
-from json import JSONDecoder
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
-PRINT_TRADING_STATES = True
-PRINT_ACTIVITY_LOGS = True
-PRINT_TRADE_HISTORY = True
-
-round_number = 0
+PRINT_TRADING_STATES = False
+round_number = 1
+day_number = 2
 
 ########################################################################
-# Parse Data
+# Read CSV Files
 ########################################################################
 
-def parse_multiple_json(s):
-    """Parse multiple JSON objects from a string using raw_decode"""
-    decoder = JSONDecoder()
-    pos = 0
-    results = []
-    s = s.strip()
-    while pos < len(s):
-        try:
-            obj, index = decoder.raw_decode(s, pos)
-            results.append(obj)
-            pos = index
-            # skip any whitespace between objects
-            while pos < len(s) and s[pos].isspace():
-                pos += 1
-        except json.JSONDecodeError:
-            break
-    return results
-
-# Prepare containers for each section
-sandbox_content = []
-activities_lines = []
-trade_history_lines = []
-activities_header = None
-current_section = None
-
-with open(f"logs/round-{round_number}/logs.log", 'r') as f:
-    for line in f:
-        line_strip = line.strip()
-        if not line_strip:
-            continue
-
-        # Switch sections based on header lines
-        if line_strip.startswith("Sandbox logs:"):
-            current_section = "sandbox"
-            continue
-        elif line_strip.startswith("Activities log:"):
-            current_section = "activities"
-            continue
-        elif line_strip.startswith("Trade History:"):
-            current_section = "trade"
-            continue
-
-        if current_section == "sandbox":
-            sandbox_content.append(line)
-        elif current_section == "activities":
-            if activities_header is None:  # first nonempty line is header
-                activities_header = line_strip.split(';')
-            else:
-                activities_lines.append(line_strip.split(';'))
-        elif current_section == "trade":
-            trade_history_lines.append(line_strip)
-
-# Process sandbox logs by joining all lines into one string
-sandbox_text = "\n".join(sandbox_content)
-sandbox_json_objects = parse_multiple_json(sandbox_text)
+# Read the prices and trades CSV files (using semicolon as delimiter)
+prices_df = pd.read_csv(f"raw/round-{round_number}/day-{day_number}/prices.csv", delimiter=";")
+trades_df = pd.read_csv(f"raw/round-{round_number}/day-{day_number}/trades.csv", delimiter=";")
 
 ########################################################################
-# Process Trading States
+# Process Trading States from CSV files
 ########################################################################
 
 trading_states = []
 
-for entry in sandbox_json_objects:
-    entry.pop("sandboxLog", None)  # remove because it's empty
-    if "lambdaLog" in entry:
+# Group the prices by timestamp
+for timestamp, group in prices_df.groupby("timestamp"):
+    listings = {}
+    order_depths = {}
+    position = {}
+    plain_obs = {}
+
+    # Process each row (each product snapshot) for this timestamp
+    for idx, row in group.iterrows():
+        product = row["product"]
+
+        # Build a Listing (using empty string for denomination)
+        if product not in listings:
+            listings[product] = Listing(symbol=product, product=product, denomination="")
+
+        # Build the OrderDepth from the bid/ask levels
+        od = OrderDepth()
+        # Process bid orders (up to three levels)
+        for i in [1, 2, 3]:
+            bid_price_col = f"bid_price_{i}"
+            bid_vol_col = f"bid_volume_{i}"
+            bid_price_val = row[bid_price_col]
+            bid_vol_val = row[bid_vol_col]
+            if pd.notna(bid_price_val) and bid_price_val != "":
+                try:
+                    price_int = int(float(bid_price_val))
+                    volume_int = int(float(bid_vol_val)) if pd.notna(bid_vol_val) and bid_vol_val != "" else 0
+                    od.buy_orders[price_int] = volume_int
+                except Exception as e:
+                    pass
+        # Process ask orders (up to three levels)
+        for i in [1, 2, 3]:
+            ask_price_col = f"ask_price_{i}"
+            ask_vol_col = f"ask_volume_{i}"
+            ask_price_val = row[ask_price_col]
+            ask_vol_val = row[ask_vol_col]
+            if pd.notna(ask_price_val) and ask_price_val != "":
+                try:
+                    price_int = int(float(ask_price_val))
+                    volume_int = int(float(ask_vol_val)) if pd.notna(ask_vol_val) and ask_vol_val != "" else 0
+                    od.sell_orders[price_int] = volume_int
+                except Exception as e:
+                    pass
+        order_depths[product] = od
+
+        # For this CSV we set a default position (could later be updated if needed)
+        position[product] = 0
+
+        # Use the mid_price as a plain observation for the product
         try:
-            lambda_log = json.loads(entry["lambdaLog"])
-        except json.JSONDecodeError as e:
-            print("Error parsing lambdaLog:", e)
-            continue
+            mid_price_val = float(row["mid_price"])
+        except Exception:
+            mid_price_val = 0.0
+        plain_obs[product] = mid_price_val
 
-        # Build listings
-        listings = {}
-        for sym, data in lambda_log.get("listings", {}).items():
-            listings[sym] = Listing(symbol=data["symbol"],
-                                    product=data["product"],
-                                    denomination=data["denomination"])
+    # Create the observation object (no conversion observations available from CSV)
+    observations = Observation(plainValueObservations=plain_obs, conversionObservations={})
 
-        # Build order_depths with proper type conversion for keys and values
-        order_depths = {}
-        for sym, orders in lambda_log.get("order_depths", {}).items():
-            od = OrderDepth()
-            od.buy_orders = {int(k): int(v) for k, v in orders.get("buy_orders", {}).items()}
-            od.sell_orders = {int(k): int(v) for k, v in orders.get("sell_orders", {}).items()}
-            order_depths[sym] = od
-
-        # Build market_trades (list of Trade objects) with int conversions
-        market_trades = {}
-        for sym, trades in lambda_log.get("market_trades", {}).items():
-            market_trades[sym] = []
-            for t in trades:
-                if t.get("timestamp", 0) == lambda_log.get("timestamp", 0) - 100:  # filter for past timestep's market trades
-                    market_trades[sym].append(
-                        Trade(symbol=t["symbol"],
-                              price=int(t["price"]),
-                              quantity=int(t["quantity"]),
-                              buyer=t.get("buyer"),
-                              seller=t.get("seller"),
-                              timestamp=int(t.get("timestamp", 0)))
-                    )
-
-        # Build own_trades with proper int conversion
-        own_trades = {}
-        for sym, trades in lambda_log.get("own_trades", {}).items():
-            own_trades[sym] = []
-            for t in trades:
-                own_trades[sym].append(
-                    Trade(symbol=t["symbol"],
-                          price=int(t["price"]),
-                          quantity=int(t["quantity"]),
-                          buyer=t.get("buyer"),
-                          seller=t.get("seller"),
-                          timestamp=int(t.get("timestamp", 0)))
-                )
-
-        # Position: Ensure that each position value is an int
-        position_raw = lambda_log.get("position", {})
-        position = {prod: int(val) for prod, val in position_raw.items()}
-
-        # Build observations
-        obs_data = lambda_log.get("observations", {})
-        plain_obs_raw = obs_data.get("plainValueObservations", {})
-        # Convert plain observations to ints
-        plain_obs = {prod: int(val) for prod, val in plain_obs_raw.items()}
-        conv_obs_raw = obs_data.get("conversionObservations", {})
-        conv_obs = {}
-        for prod, details in conv_obs_raw.items():
-            conv_obs[prod] = ConversionObservation(
-                bidPrice=float(details.get("bidPrice", 0.0)),
-                askPrice=float(details.get("askPrice", 0.0)),
-                transportFees=float(details.get("transportFees", 0.0)),
-                exportTariff=float(details.get("exportTariff", 0.0)),
-                importTariff=float(details.get("importTariff", 0.0)),
-                sugarPrice=float(details.get("sugarPrice", 0.0)),
-                sunlightIndex=float(details.get("sunlightIndex", 0.0))
+    # Build market trades for each product for this trading state.
+    state_market_trades = {}
+    for product in listings.keys():
+        ts_filter = int(timestamp) - 100
+        trades_subset = trades_df[(trades_df["timestamp"] == ts_filter) &
+                                  (trades_df["symbol"] == product)]
+        trades_list = []
+        for _, trade_row in trades_subset.iterrows():
+            try:
+                price_val = int(float(trade_row["price"]))
+                qty_val = int(trade_row["quantity"])
+            except Exception:
+                price_val = 0
+                qty_val = 0
+            trade_obj = Trade(
+                symbol=trade_row["symbol"],
+                price=price_val,
+                quantity=qty_val,
+                buyer=trade_row["buyer"] if pd.notna(trade_row["buyer"]) and trade_row["buyer"] != "" else None,
+                seller=trade_row["seller"] if pd.notna(trade_row["seller"]) and trade_row["seller"] != "" else None,
+                timestamp=int(trade_row["timestamp"])
             )
-        observations = Observation(plainValueObservations=plain_obs,
-                                   conversionObservations=conv_obs)
+            trades_list.append(trade_obj)
+        state_market_trades[product] = trades_list
 
-        # Create the TradingState object with types properly set
-        state = TradingState(
-            traderData=str(lambda_log.get("traderData", "")),
-            timestamp=int(lambda_log.get("timestamp", 0)),
-            listings=listings,
-            order_depths=order_depths,
-            own_trades=own_trades,
-            market_trades=market_trades,
-            position=position,
-            observations=observations
-        )
-        trading_states.append(state)
+    # Create the TradingState object for this timestamp
+    state = TradingState(
+        traderData="",
+        timestamp=int(timestamp),
+        listings=listings,
+        order_depths=order_depths,
+        own_trades={},  # no own trades provided in the CSV files
+        market_trades=state_market_trades,
+        position=position,
+        observations=observations
+    )
+    trading_states.append(state)
 
 ########################################################################
-# Write Trading States to Log File
+# Write Trading States to JSON File
 ########################################################################
-# Convert each TradingState into a dictionary (via its JSON representation)
+
+# Convert each TradingState into a dictionary and then dump to file.
 trading_states_list = [json.loads(state.toJSON()) for state in trading_states]
-with open(f"data/round-{round_number}/trading_states.json", "w") as ts_file:
+with open(f"data/round-{round_number}/day-{day_number}/trading_states.json", "w") as ts_file:
     json.dump(trading_states_list, ts_file, indent=2)
 
 ########################################################################
-# Process Activity Logs
+# Optionally print Trading States to Console
 ########################################################################
 
-activities_df = pd.DataFrame(activities_lines, columns=activities_header)
-activities_df.drop(columns=['day'], inplace=True)
-
-# Rename profit_and_loss to pnl and adjust bid/ask volume column names
-activities_df.rename(columns={
-    'profit_and_loss': 'pnl',
-    'bid_volume_1': 'bid_vol_1',
-    'bid_volume_2': 'bid_vol_2',
-    'bid_volume_3': 'bid_vol_3',
-    'ask_volume_1': 'ask_vol_1',
-    'ask_volume_2': 'ask_vol_2',
-    'ask_volume_3': 'ask_vol_3'
-}, inplace=True)
-
-# Split by product and drop the redundant 'product' column from each DataFrame
-product_dfs = {
-    product: activities_df[activities_df['product'] == product]
-                .drop(columns=['product'])
-                .reset_index(drop=True)
-    for product in activities_df['product'].unique()
-}
-
-########################################################################
-# Process Trade History
-########################################################################
-
-trade_product_dfs = {}
-
-if trade_history_lines:
-    trade_history_text = " ".join(trade_history_lines)
-    try:
-        trades_data = json.loads(trade_history_text)
-        trade_df = pd.DataFrame(trades_data)
-        trade_df = trade_df[['symbol', 'price', 'quantity', 'timestamp']]
-        # Create a separate DataFrame for each product (grouped by symbol)
-        trade_product_dfs = {
-            symbol: trade_df[trade_df['symbol'] == symbol]
-                        .drop(columns=['symbol'])
-                        .reset_index(drop=True)
-            for symbol in trade_df['symbol'].unique()
-        }
-    except json.JSONDecodeError as e:
-        print("Error parsing trade history:", e)
-
-########################################################################
-# main()
-########################################################################
-
-if __name__ == "__main__":
-    
-    if PRINT_TRADING_STATES:
-        print("\n\n============================================================================================================\n")
-        print("Trading States\n")
-        for state in trading_states[:3]:
-            print(state.toJSON())
-            print()
-            
-    if PRINT_ACTIVITY_LOGS:
-        print("\n============================================================================================================\n")
-        print("Activity DataFrames")
-        for product, df in product_dfs.items():
-            print("\n------------------------------------------------------------------------------------------------------------\n")
-            print(f"{product}:\n")
-            print(df.head(10))
-
-    if PRINT_TRADE_HISTORY:
-        print("\n\n============================================================================================================\n")
-        print("Trade History DataFrames")
-        for symbol, df in trade_product_dfs.items():
-            print("\n------------------------------------------------------------------------------------------------------------\n")
-            print(f"{symbol}\n")
-            print(df.head(10), "\n")
+if PRINT_TRADING_STATES:
+    print("\n\n============================================================================================================\n")
+    print("Trading States\n")
+    for state in trading_states:
+        print(state.toJSON())
+        print()
