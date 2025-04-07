@@ -19,8 +19,8 @@
 To run the backtester from the command line, run the command `python main.py` followed by the following command-line arguments *in order*. If one or more arguments are missing, the flags are interpreted based on their positions and the remaining parameters are set to default values. If no arguments are provided, it defaults to testing `algorithms/algo.py` on round 0 data. For meaningful results, the first two arguments (round number and algorithm path) are usually needed.
 
 1. **Round number**  
-   - **Description:** the round of data to backtest on.
-   - **Constraints:** integer between 0 and 5 (inclusive).
+   - **Description:** the DAY of data to backtest on (NOT ROUND).
+   - **Constraints:** integer between 0 and 2 (inclusive).
    - **Default:** `0`
 2. **Algorithm path**  
    - **Description:** the file path to your algorithm.
