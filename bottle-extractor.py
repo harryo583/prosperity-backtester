@@ -5,16 +5,16 @@ import pandas as pd
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
 PRINT_TRADING_STATES = False
-round_number = 1
-day_number = 2
+ROUND_NUMBER = 1
+DAY_NUMBER = 1
 
 ########################################################################
 # Read CSV Files
 ########################################################################
 
 # Read the prices and trades CSV files (using semicolon as delimiter)
-prices_df = pd.read_csv(f"raw/round-{round_number}/day-{day_number}/prices.csv", delimiter=";")
-trades_df = pd.read_csv(f"raw/round-{round_number}/day-{day_number}/trades.csv", delimiter=";")
+prices_df = pd.read_csv(f"raw/round-{ROUND_NUMBER}/day-{DAY_NUMBER}/prices.csv", delimiter=";")
+trades_df = pd.read_csv(f"raw/round-{ROUND_NUMBER}/day-{DAY_NUMBER}/trades.csv", delimiter=";")
 
 ########################################################################
 # Process Trading States from CSV files
@@ -124,7 +124,7 @@ for timestamp, group in prices_df.groupby("timestamp"):
 
 # Convert each TradingState into a dictionary and then dump to file.
 trading_states_list = [json.loads(state.toJSON()) for state in trading_states]
-with open(f"data/round-{round_number}/day-{day_number}/trading_states.json", "w") as ts_file:
+with open(f"data/round-{ROUND_NUMBER}/day-{DAY_NUMBER}/trading_states.json", "w") as ts_file:
     json.dump(trading_states_list, ts_file, indent=2)
 
 ########################################################################
