@@ -79,8 +79,8 @@ class Trader:
             fair_value = sum(self.kelp_midprice_cache) / len(self.kelp_midprice_cache)
             vwap_trend = vwap - fair_value
 
-            # --- Inventory-aware skew adjustment ---
-            inventory_skew = -position / POS_LIMIT_KELP * make_width  # e.g., +ve if short, pushing price down to attract buys
+            # Inventory-aware skew adjustment
+            inventory_skew = -position / POS_LIMIT_KELP * make_width  # e.g. +ve if short, pushing price down to attract buys
             trend_skew = vwap_trend * 0.5  # dampen market trend influence
 
             skewed_fair_value = fair_value + inventory_skew + trend_skew
