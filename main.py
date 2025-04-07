@@ -18,8 +18,6 @@ POSITION_LIMITS = {
     "KELP": 100
 }
 
-day_number = 0
-
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
     with open(log_path, "r") as f:
