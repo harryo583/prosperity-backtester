@@ -62,7 +62,7 @@ for timestamp, group in prices_df.groupby("timestamp"):
                 try:
                     price_int = int(float(ask_price_val))
                     volume_int = int(float(ask_vol_val)) if pd.notna(ask_vol_val) and ask_vol_val != "" else 0
-                    od.sell_orders[price_int] = volume_int
+                    od.sell_orders[price_int] = -volume_int # NOTE
                 except Exception as e:
                     pass
         order_depths[product] = od
