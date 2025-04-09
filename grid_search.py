@@ -1,38 +1,57 @@
 
 from itertools import product
 import subprocess
-import sys
 
 
-parameters = []
-def add_parameter(name, begin, end, increment):
-    parameters.append({
-        'name': name,
-        'begin': begin,
-        'end': end,
-        'increment': increment
-    })
+'''
+add a parameter reader to the top of your algo.py file
 
-def grid_search(algo_path):
-    # go through all combinations of parameters
-    param_values = []
-    for param in parameters:
-        values = []
-        current = param['begin']
-        while current <= param['end']:
-            values.append(current)
-            current += param['increment']
-        param_values.append(values)
-    all_combinations = list(product(*param_values))
-    
-    best_pnl = float('-inf')
-    best_combination = None
+parameters_path = PARAMETER_PATH
+with open(parameters_path, 'r') as f:
+    line = f.readline().strip()
+    if line:
+        P1, P2, P3, P4 = line.split(',')
 
-    with open('grid_search_data/parameters.txt', 'w') as f:
+        P1 = float(alpha_str)
+        P2 = int(fast_span_str)
+        P3 = int(slow_span_str)
+        P4 = float(diff_val_str)
+'''
+
+class GridSearcher:
+
+    def __init__(self):
+        self.parameters = []
+
+    def add_parameter(self, name, begin, end, increment):
+        self.parameters.append({
+            'name': name,
+            'begin': begin,
+            'end': end,
+            'increment': increment
+        })
+
+    def grid_search(self,algo_path):
+        # go through all combinations of parameters
+        param_values = []
+        for param in self.parameters:
+            values = []
+            current = param['begin']
+            while current <= param['end']:
+                values.append(current)
+                current += param['increment']
+            param_values.append(values)
+        all_combinations = list(product(*param_values))
+        
+        best_pnl = float('-inf')
+        best_combination = None
+
+        
         for combination in all_combinations:
             total_pnl = 0
             line = ','.join(str(v) for v in combination)
-            f.write(line + '\n')
+            with open('grid_search_data/parameters.txt', 'w') as f:
+                f.write(line + '\n')
             subprocess.run(['python3', 'main.py', "0", algo_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             # wait for it to finish
 
@@ -52,26 +71,18 @@ def grid_search(algo_path):
             if total_pnl > best_pnl:
                 best_pnl = total_pnl
                 best_combination = combination
-            
-    print("Best PNL:", best_pnl)
-    print("Best Combination:", best_combination)
+                
+        print("Best PNL:", best_pnl)
+        print("Best Combination:", best_combination)
 
-    # clear both files
-    with open('grid_search_data/parameters.txt', 'w') as f:
-        f.write('')
-    with open('grid_search_data/pnl.txt', 'w') as f:
-        f.write('')
+        with open('grid_search_data/parameters.txt', 'w') as f:
+            f.write('')
+        with open('grid_search_data/pnl.txt', 'w') as f:
+            f.write('')
+        
+        
 
-if __name__ == "__main__":
-    algo_path = "/home/zhoujiayi/prosperity-3/prosperity-3/round-0/algo.py"
-    add_parameter('ALPHA', 0.01, 0.5, 0.01)
-    add_parameter('FAST_SPAN', 5, 50, 5)
-    add_parameter('SLOW_SPAN', 50, 200, 10)
-    add_parameter('DIFF_VAL', 0.1, 1.0, 0.1)
-    grid_search(algo_path)
-    
-
-    
+        
 
 
 
