@@ -183,7 +183,7 @@ def main(algo_path=None) -> None:
             with contextlib.redirect_stdout(lambda_buffer):  # redirect stdout to buffer
                 result, conversions, traderData = trader.run(state)
             lambda_log = lambda_buffer.getvalue()
-                
+        
         sandbox_logs.append({
             "sandboxLog": "",
             "lambdaLog": lambda_log,
