@@ -19,7 +19,6 @@ POSITION_LIMITS = {
     "SQUID_INK": 50
 }
 
-
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
     with open(log_path, "r") as f:
@@ -311,7 +310,8 @@ def main(algo_path=None) -> None:
     market_conditions_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/orderbook.csv", sep=";", index=False)
     
     trade_history_df = pd.DataFrame(trade_history_list)
-    trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
+    if not trade_history_df.empty:
+        trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/trade_history.csv", sep=";", index=False)
     print("-----------------------------------------------------------------------------------")
     print("TOTAL PNL:", trader.aggregate_pnl)
