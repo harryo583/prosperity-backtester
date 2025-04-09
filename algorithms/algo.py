@@ -55,6 +55,14 @@ class Trader:
 
         return accumulated_buy_volume, accumulated_sell_volume
     
+    
+    def squid_ink_strategy(self, state):
+        orderbook = state.order_depths.get(SQUID_INK)
+        position = state.position.get(SQUID_INK, 0)
+        orders: List[Order] = []
+        
+        return orders
+    
 
     def run(self, state: TradingState) -> Dict[str, List[Order]]:
         """
@@ -64,11 +72,11 @@ class Trader:
         traderData = "SAMPLE" 
         conversions = 1
         
-        # for product in state.order_depths:
-        #     match product:
-        #         case "SQUID_INK":
-        #             result[KELP] = []
-        #         case _:
-        #             pass
+        for product in state.order_depths:
+            match product:
+                case "SQUID_INK":
+                    result[SQUID_INK] = self.squid_ink_strategy(state)
+                case _:
+                    pass
         
         return result, conversions, traderData
