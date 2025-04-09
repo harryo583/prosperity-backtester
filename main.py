@@ -13,6 +13,7 @@ from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, Con
 
 ROUND_NUMBER = 1
 PRODUCTS = ["RAINFOREST_RESIN", "KELP", "SQUID_INK"]
+CONSOLE_PRINT = True
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 50,
     "KELP": 50,
@@ -173,16 +174,16 @@ def main(algo_path=None) -> None:
         # Update the state with newest trader data
         state.position = position
         state.traderData = traderData  # traderData from previous run
-        
-        # lambda_buffer = io.StringIO()
-        
-        # with contextlib.redirect_stdout(lambda_buffer):  # redirect stdout to buffer
-        #     result, conversions, traderData = trader.run(state)
-        # lambda_log = lambda_buffer.getvalue()
-        
-        result, conversions, traderData = trader.run(state)
-        lambda_log = ""
-        
+                
+        if CONSOLE_PRINT:
+            result, conversions, traderData = trader.run(state)
+            lambda_log = ""
+        else:
+            lambda_buffer = io.StringIO()
+            with contextlib.redirect_stdout(lambda_buffer):  # redirect stdout to buffer
+                result, conversions, traderData = trader.run(state)
+            lambda_log = lambda_buffer.getvalue()
+                
         sandbox_logs.append({
             "sandboxLog": "",
             "lambdaLog": lambda_log,
