@@ -353,7 +353,11 @@ def main(algo_path=None) -> None:
         # Trade history section
         f.write("Trade History:\n")
         f.write(json.dumps(trade_history_list, indent=2))
-    
+
+    pnl_file_path = f"grid_search_data/pnl.txt"
+    with open(pnl_file_path, "w") as f:
+        f.write(str(trader.aggregate_pnl))
+        
     plot_pnl(pnl_over_time)  # call plotting function
 
 
