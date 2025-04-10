@@ -168,13 +168,18 @@ def main(algo_path=None) -> None:
         traded = False
         all_trades_executed = []
         
+        mid_prices = {}
+        for product in state.listings:
+            mid_prices[product] = (min(state.order_depths[product].sell_orders.keys()) + \
+                max(state.order_depths[product].buy_orders.keys())) // 2
+        
         if LOG_LENGTH and timestamp > LOG_LENGTH * 100:
             break
-
+        
         # Update the state with newest trader data
         state.position = position
         state.traderData = traderData  # traderData from previous run
-                
+        
         if CONSOLE_PRINT:
             result, conversions, traderData = trader.run(state)
             lambda_log = ""
@@ -243,9 +248,8 @@ def main(algo_path=None) -> None:
         trader.aggregate_pnl = trader.aggregate_cash
         
         for product, pos in position.items():
-            mid_price = (max(state.order_depths[product].buy_orders) + min(state.order_depths[product].sell_orders)) / 2
-            trader.pnl[product] += pos * mid_price
-            trader.aggregate_pnl += pos * mid_price
+            trader.pnl[product] += pos * mid_prices[product]
+            trader.aggregate_pnl += pos * mid_prices[product]
             
         if traded and LOG_LENGTH and timestamp < LOG_LENGTH * 100:
             print(f"[{timestamp}]")
@@ -353,7 +357,11 @@ def main(algo_path=None) -> None:
         # Trade history section
         f.write("Trade History:\n")
         f.write(json.dumps(trade_history_list, indent=2))
-    
+
+    pnl_file_path = f"grid_search_data/pnl.txt"
+    with open(pnl_file_path, "w") as f:
+        f.write(str(trader.aggregate_pnl))
+        
     plot_pnl(pnl_over_time)  # call plotting function
 
 
