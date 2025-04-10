@@ -18,6 +18,8 @@ class Trader:
     def __init__(self):
         self.squid_midprice_cache = []
         self.squid_vwap_cache = []
+        self.squid_mm_midprice_cache = []
+        self.squid_mm_vwap_cache = []
     
     def clear_position_order(
         self,
@@ -80,27 +82,13 @@ class Trader:
         val = 4 / a / (1 + math.exp(-a * (x - b))) - 2 / a + b
         return val
     
-    def quoter(self, position, theo, midprice, spread, offset_inflation_factor, deflection_limit, soft_limiter_volume) -> Tuple[float]:
-        """ Prices the market maker bid and ask """
-        offset = offset_inflation_factor * spread / 2
-        order_imbalance = self.linear_clamp(- position * midprice / soft_limiter_volume, -1, 1)
-        deflection = order_imbalance * deflection_limit
-                
-        bid_price = theo + offset * (deflection - 1)
-        ask_price = theo + offset * (deflection - 1)
-        
-        volume = 0 # NOTE NEED TO CHANGE
-        
-        bid_volume = volume * (1 + order_imbalance)
-        ask_volume = volume * (1 - order_imbalance)
-        
-        bid_quantity = bid_volume / bid_price
-        ask_quantity = ask_volume / ask_price
-        
-        return round(bid_price), round(bid_quantity), round(ask_price), round(ask_quantity)
-        
+    def get_squid_ink_fair_price(self):
+        pass
+   
+    def squid_ewa(self, state: TradingState, alpha_short, alpha_long):
+        pass
     
-    def squid_strategy_0(self, state: TradingState):
+    def squid_sma_strategy(self, state: TradingState, short_window_size, long_window_size):
         orderbook = state.order_depths.get(KELP)
         position = state.position.get(KELP, 0)
         orders: List[Order] = []
@@ -118,7 +106,7 @@ class Trader:
             vwap = (best_ask_price * best_ask_volume + best_bid_price * best_bid_volume) // (best_ask_volume + best_bid_volume)
             
             best_bid_price = 0
-            best_ask_price = 'inf'
+            best_ask_price = float('inf')
             
             best_bid_quantity = None
             best_ask_quantity = None
@@ -143,58 +131,77 @@ class Trader:
                     market_maker_asks[ask_price] = ask_quantity
             
             mm_best_bid_price = min(market_maker_bids.keys())
+            mm_best_bid_quantity = market_maker_bids[mm_best_bid_price]
             mm_best_ask_price = max(market_maker_asks.keys())
+            mm_best_ask_quantity = market_maker_asks[mm_best_ask_price]
         
             mm_midprice = (mm_best_bid_price + mm_best_ask_price) // 2
-            mm_vwap = 
+            mm_vwap = (mm_best_bid_price * mm_best_bid_quantity + mm_best_ask_price * mm_best_ask_quantity)\
+                // (mm_best_bid_quantity + mm_best_ask_quantity)
         
-        offset_inflation_factor = 1.3
-        quoting_volume = 10
-        soft_limiting_volume = 20
-        min_flux = 0.5
-        deflection_limit = -1
-        ewma_alpha = 0.5
-        size_threshold = 12
-        
-        if orderbook.sell_orders and orderbook.buy_orders:
-            best_ask_price = min(orderbook.sell_orders.keys())
-            best_bid_price = max(orderbook.buy_orders.keys())
-            best_ask_volume = -orderbook.sell_orders[best_ask_price]
-            best_bid_volume = orderbook.buy_orders[best_bid_price]
-            
-            midprice = (best_ask_price + best_bid_price) / 2
-            volume_weighted_midprice = (best_ask_price * best_ask_volume + best_bid_price * best_bid_volume) // (best_ask_volume + best_bid_volume)
-                    
-            voluminous_bids = (price for price, vol in orderbook.buy_orders.items() if vol >= size_threshold)
-            voluminous_asks = (price for price, vol in orderbook.sell_orders.items() if -vol >= size_threshold)
-            market_maker_bid = min(voluminous_bids, default=best_bid_price)
-            market_maker_ask = min(voluminous_asks, default=best_ask_price)
-            
-            filtered_midprice = (market_maker_bid + market_maker_ask) / 2
-            
             self.squid_midprice_cache.append(midprice)
-            self.squid_vwap_cache.append(volume_weighted_midprice)
+            self.squid_vwap_cache.append(vwap)
+            self.squid_mm_midprice_cache.append(mm_midprice)
+            self.squid_mm_vwap_cache.append(mm_vwap)
+
             
-            bid_price, bid_quantity, ask_price, ask_quantity = \
-                self.quoter(position,
-                            midprice, # theo
-                            midprice, # midprice
-                            best_ask_price - best_bid_price, # spread
-                            offset_inflation_factor,
-                            deflection_limit,
-                            soft_limiting_volume)
-            
-            buy_quantity = min(best_ask_volume, POS_LIMIT_KELP - position)
-            if buy_quantity > 0:
-                orders.append(Order(KELP, bid_price, buy_quantity))
-                total_buy_volume += buy_quantity
-            
-            sell_quantity = min(best_bid_volume, POS_LIMIT_KELP + position)
-            if sell_quantity > 0:
-                orders.append(Order(KELP, ask_price, -sell_quantity))
-                total_sell_volume += sell_quantity
             
         return orders
+    
+    
+    def squid_sma(self, state: TradingState, short_window_size: int, long_window_size: int) -> List[Order]:
+        # Get the SQUID_INK order book and current position.
+        orderbook = state.order_depths.get(SQUID_INK)
+        position = state.position.get(SQUID_INK, 0)
+        orders: List[Order] = []
+        
+        # Check that the order book is valid.
+        if orderbook is None or not orderbook.buy_orders or not orderbook.sell_orders:
+            return orders
+        
+        # Compute the best bid and best ask prices.
+        best_ask = min(orderbook.sell_orders.keys())
+        best_bid = max(orderbook.buy_orders.keys())
+        # Midprice is the average of best ask and best bid.
+        midprice = (best_ask + best_bid) / 2
+
+        # Update the price cache.
+        self.squid_midprice_cache.append(midprice)
+        # Optionally, limit the cache length to avoid unbounded growth.
+        if len(self.squid_midprice_cache) > long_window_size:
+            self.squid_midprice_cache.pop(0)
+        else:
+            return []
+
+        # Compute the simple moving averages:
+        # Use all available prices if fewer than the window size.
+        recent_short = self.squid_midprice_cache[-short_window_size:] if len(self.squid_midprice_cache) >= short_window_size else self.squid_midprice_cache
+        recent_long  = self.squid_midprice_cache[-long_window_size:] if len(self.squid_midprice_cache) >= long_window_size else self.squid_midprice_cache
+
+        short_sma = sum(recent_short) / len(recent_short)
+        long_sma  = sum(recent_long)  / len(recent_long)
+
+        # Determine the target position:
+        # If the short-term SMA is above the long-term SMA, go all in long.
+        # Otherwise, go all in short.
+        if short_sma > long_sma:
+            target_position = POS_LIMIT_SQUID_INK  # fully long
+        else:
+            target_position = -POS_LIMIT_SQUID_INK  # fully short
+
+        # Calculate the order quantity required to adjust the position.
+        order_quantity = target_position - position
+
+        if order_quantity != 0:
+            # If buying, execute at the best ask price.
+            if order_quantity > 0:
+                orders.append(Order(SQUID_INK, best_ask, order_quantity))
+            # If selling, execute at the best bid price.
+            else:
+                orders.append(Order(SQUID_INK, best_bid, order_quantity))
+        
+        return orders
+
     
 
     def run(self, state: TradingState) -> Dict[str, List[Order]]:
@@ -208,7 +215,7 @@ class Trader:
         for product in state.order_depths:
             match product:
                 case "SQUID_INK":
-                    result[SQUID_INK] = self.squid_ink_strategy(state)
+                    result[SQUID_INK] = self.squid_sma(state, 10, 50)
                 case _:
                     pass
         

@@ -1,4 +1,4 @@
-# main.py
+# post-tester.py
 
 import io
 import sys
@@ -167,6 +167,10 @@ def main(algo_path=None) -> None:
         timestamp = state.timestamp
         traded = False
         all_trades_executed = []
+        mid_prices = {}
+        for product in state.listings:
+            mid_prices[product] = (min(state.order_depths[product].sell_orders.keys()) + \
+                max(state.order_depths[product].buy_orders.keys())) // 2
         
         if LOG_LENGTH and timestamp > LOG_LENGTH * 100:
             break
@@ -240,10 +244,9 @@ def main(algo_path=None) -> None:
         trader.aggregate_pnl = trader.aggregate_cash
         
         for product, pos in position.items():
-            mid_price = (max(state.order_depths[product].buy_orders) + min(state.order_depths[product].sell_orders)) / 2
-            trader.pnl[product] += pos * mid_price
-            trader.aggregate_pnl += pos * mid_price
-            
+            trader.pnl[product] += pos * mid_prices[product]
+            trader.aggregate_pnl += pos * mid_prices[product]
+        
         if traded and LOG_LENGTH and timestamp < LOG_LENGTH * 100:
             print(f"[{timestamp}]")
             for trade in all_trades_executed:
@@ -310,9 +313,14 @@ def main(algo_path=None) -> None:
     ]]
     market_conditions_df.to_csv(f"post-results/round-{ROUND_NUMBER}/orderbook.csv", sep=";", index=False)
     
+    
     trade_history_df = pd.DataFrame(trade_history_list)
-    trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
+
+    if not trade_history_df.empty:
+        trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
+
     trade_history_df.to_csv(f"post-results/round-{ROUND_NUMBER}/trade_history.csv", sep=";", index=False)
+    
     print("-----------------------------------------------------------------------------------")
     print("TOTAL PNL:", trader.aggregate_pnl)
     for product, pnl in trader.pnl.items():
