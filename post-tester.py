@@ -12,6 +12,7 @@ from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
 ROUND_NUMBER = 2
+SHOW_PLOT = True
 
 PRODUCTS = ["RAINFOREST_RESIN", "KELP", "SQUID_INK", "CROISSANTS", "DJEMBES", "JAMS", "PICNIC_BASKET1", "PICNIC_BASKET2"]
 
@@ -151,6 +152,8 @@ def plot_pnl(per_product_pnl_over_time):
     plt.legend()
     plt.tight_layout()
     plt.savefig(f"post-results/round-{ROUND_NUMBER}/pnl_over_time.png")
+    if SHOW_PLOT:
+        plt.show()
 
 
 def main(algo_path=None) -> None:
