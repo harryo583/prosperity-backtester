@@ -131,13 +131,14 @@ class Trader:
         total_sell_volume = 0
 
         # Determine price levels for resting orders
-        lowest_sell_above_threshold = min(
-            [price for price in orderbook.sell_orders.keys() if price > reference_price + 1]
-        )
+        filtered_sell_orders = [price for price in orderbook.sell_orders.keys() if price > reference_price + 1]
+        filtered_buy_orders = [price for price in orderbook.buy_orders.keys() if price < reference_price - 1]
         
-        highest_buy_below_threshold = max(
-            [price for price in orderbook.buy_orders.keys() if price < reference_price - 1]
-        )
+        if not filtered_sell_orders or not filtered_buy_orders:
+            return []
+        
+        lowest_sell_above_threshold = min(filtered_sell_orders)
+        highest_buy_below_threshold = max(filtered_buy_orders)
 
         # Take liquidity on the buy side if the best ask is below the reference price
         if orderbook.sell_orders:
