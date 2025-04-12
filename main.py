@@ -11,13 +11,29 @@ from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
-ROUND_NUMBER = 1
-PRODUCTS = ["RAINFOREST_RESIN", "KELP", "SQUID_INK"]
+ROUND_NUMBER = 2
+
+PRODUCTS = ["RAINFOREST_RESIN", "KELP", "SQUID_INK", "CROISSANTS", "DJEMBES", "JAMS", "PICNIC_BASKET1", "PICNIC_BASKET2"]
+RESIN = "RAINFOREST_RESIN"
+KELP = "KELP"
+SQUID_INK = "SQUID_INK"
+CROISSANTS = "CROISSANTS"
+DJEMBES = "DJEMBES"
+JAMS = "JAMS"
+PCB1 = "PICNIC_BASKET1"
+PCB2 = "PICNIC_BASKET2"
+
 CONSOLE_PRINT = True
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 50,
     "KELP": 50,
-    "SQUID_INK": 50
+    "SQUID_INK": 50,
+    "CROISSANTS": 250,
+    "JAM": 350,
+    "DJEMBE": 60,
+    "PICNIC_BASKET1": 60,
+    "PICNIC_BASKET2": 100
+    
 }
 
 def load_trading_states(log_path: str):
