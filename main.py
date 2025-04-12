@@ -113,7 +113,6 @@ def load_trading_states(log_path: str):
     return [convert_trading_state(d) for d in trading_states_data]
 
 
-
 def parse_algorithm(algo_path: str):
     algorithm_path = Path(algo_path).expanduser().resolve()
     if not algorithm_path.is_file():
@@ -123,7 +122,6 @@ def parse_algorithm(algo_path: str):
     return import_module(algorithm_path.stem)
 
 
-
 def print_self_trade(trade):
     if trade.seller == "SUBMISSION":
         print(f"Sold {trade.quantity} {trade.symbol} at {trade.price}.")
@@ -131,27 +129,26 @@ def print_self_trade(trade):
         print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
 
 
-
-def plot_pnl(pnl_over_time):
+def plot_pnl(per_product_pnl_over_time):
     """
-    Plots the PnL over time.
+    Plots the PnL over time for each product on the same axes.
     """
-    if not pnl_over_time:
+    if not per_product_pnl_over_time:
         print("No PnL data available to plot.")
         return
 
-    # Unpack timestamps and pnl values
-    timestamps, pnl_values = zip(*pnl_over_time)
-    
     plt.figure(figsize=(10, 6))
-    plt.plot(timestamps, pnl_values, marker="o", markersize=2)
+    for product, pnl_data in per_product_pnl_over_time.items():
+        if pnl_data:
+            timestamps, pnl_values = zip(*pnl_data)
+            plt.plot(timestamps, pnl_values, marker="o", markersize=2, label=product)
     plt.xlabel("Timestamp")
     plt.ylabel("Profit and Loss")
-    plt.title("PnL Over Time")
+    plt.title("PnL Over Time per Product")
     plt.xticks(rotation=45)
+    plt.legend()
     plt.tight_layout()
     plt.savefig(f"results/round-{ROUND_NUMBER}/day-{day_number}/pnl_over_time.png")
-
 
 
 def main(algo_path=None) -> None:
@@ -168,10 +165,11 @@ def main(algo_path=None) -> None:
     trader.aggregate_pnl = 0
     
     # Containers for exporting CSVs and tracking PnL
-    market_conditions = []  # list of dicts for market conditions snapshot
-    trade_history_list = []  # list of dicts for each trade
-    sandbox_logs = [] # list to store sandbox logs
-    pnl_over_time = []  # list of (timestamp, pnl)
+    market_conditions = []      # list of dicts for market conditions snapshot
+    trade_history_list = []     # list of dicts for each trade
+    sandbox_logs = []           # list to store sandbox logs
+    # Instead of a single list for aggregated pnl, record pnl per product.
+    per_product_pnl = {prod: [] for prod in PRODUCTS}
     
     # Variables to keep track of trader logs
     position = {prod: 0 for prod in PRODUCTS}
@@ -185,8 +183,8 @@ def main(algo_path=None) -> None:
         
         mid_prices = {}
         for product in state.listings:
-            mid_prices[product] = (min(state.order_depths[product].sell_orders.keys()) + \
-                max(state.order_depths[product].buy_orders.keys())) // 2
+            mid_prices[product] = (min(state.order_depths[product].sell_orders.keys()) +
+                                   max(state.order_depths[product].buy_orders.keys())) // 2
         
         if LOG_LENGTH and timestamp > LOG_LENGTH * 100:
             break
@@ -229,15 +227,15 @@ def main(algo_path=None) -> None:
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) + total_filled  # update trader position
                     cash_change = -sum(trade.price * trade.quantity for trade in trades_executed)
-                    trader.cash[product] += cash_change # update cash
-                    trader.aggregate_cash += cash_change # update cash
+                    trader.cash[product] += cash_change  # update cash
+                    trader.aggregate_cash += cash_change  # update cash
                 elif order.quantity < 0:  # sell order
                     trades_executed = match_sell_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
                     position[product] = position.get(product, 0) - total_filled  # update trader position
                     cash_change = sum(trade.price * trade.quantity for trade in trades_executed)
                     trader.cash[product] += cash_change
-                    trader.aggregate_cash += cash_change # update cash
+                    trader.aggregate_cash += cash_change  # update cash
                 
                 # Record each executed trade in trade_history_list
                 for trade in trades_executed:
@@ -265,7 +263,11 @@ def main(algo_path=None) -> None:
         for product, pos in position.items():
             trader.pnl[product] += pos * mid_prices[product]
             trader.aggregate_pnl += pos * mid_prices[product]
-            
+        
+        # Record pnl for each product over time
+        for product in PRODUCTS:
+            per_product_pnl[product].append((timestamp, trader.pnl.get(product, 0)))
+        
         if traded and LOG_LENGTH and timestamp < LOG_LENGTH * 100:
             print(f"[{timestamp}]")
             for trade in all_trades_executed:
@@ -273,9 +275,6 @@ def main(algo_path=None) -> None:
             print(f"Positions: {state.position}")
             print(f"Cash: {trader.aggregate_cash}")
             print(f"PNL: {trader.aggregate_pnl}\n")
-        
-        # Record pnl over time
-        pnl_over_time.append((timestamp, trader.aggregate_pnl))
         
         # Record market condition snapshot for each product
         for product in PRODUCTS:
@@ -336,6 +335,7 @@ def main(algo_path=None) -> None:
     if not trade_history_df.empty:
         trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
     trade_history_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/trade_history.csv", sep=";", index=False)
+    
     print("-----------------------------------------------------------------------------------")
     print("TOTAL PNL:", trader.aggregate_pnl)
     for product, pnl in trader.pnl.items():
@@ -372,12 +372,13 @@ def main(algo_path=None) -> None:
         # Trade history section
         f.write("Trade History:\n")
         f.write(json.dumps(trade_history_list, indent=2))
-
+    
     pnl_file_path = f"grid_search_data/pnl.txt"
     with open(pnl_file_path, "w") as f:
         f.write(str(trader.aggregate_pnl))
         
-    plot_pnl(pnl_over_time)  # call plotting function
+    # Call the updated plotting function with per-product pnl data.
+    plot_pnl(per_product_pnl)
 
 
 if __name__ == "__main__":
