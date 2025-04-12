@@ -1,4 +1,3 @@
-
 # main.py
 
 import io
@@ -7,11 +6,14 @@ import json
 import contextlib
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.colors as mcolors  # For color manipulation
 from pathlib import Path
 from importlib import import_module
 from matcher import match_buy_order, match_sell_order
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
+# Constants for round, products, etc.
 ROUND_NUMBER = 2
 SHOW_PLOT = True
 
@@ -25,7 +27,7 @@ JAMS = "JAMS"
 PCB1 = "PICNIC_BASKET1"
 PCB2 = "PICNIC_BASKET2"
 
-CONSOLE_PRINT = True
+CONSOLE_PRINT = False
 POSITION_LIMITS = {
     "RAINFOREST_RESIN": 50,
     "KELP": 50,
@@ -36,6 +38,35 @@ POSITION_LIMITS = {
     "PICNIC_BASKET1": 60,
     "PICNIC_BASKET2": 100
 }
+
+DISPLAY_RESTING_QUOTES = False
+QUOTES_DISPLAY_PRODUCTS = [SQUID_INK]
+
+PRODUCT_COLORS = {
+    "RAINFOREST_RESIN": "#1f77b4",
+    "KELP": "#ff7f0e",
+    "SQUID_INK": "#2ca02c",
+    "CROISSANTS": "#d62728",
+    "DJEMBES": "#9467bd",
+    "JAMS": "#8c564b",
+    "PICNIC_BASKET1": "#e377c2",
+    "PICNIC_BASKET2": "#7f7f7f"
+}
+
+def lighten_color(color, amount=0.5):
+    """
+    Lightens the given color by mixing it with white.
+    Input can be matplotlib color string, hex string, or RGB tuple.
+    The amount parameter controls how much white is mixed in [0, 1].
+    """
+    try:
+        c = mcolors.cnames[color]
+    except KeyError:
+        c = color
+    c = mcolors.to_rgb(c)
+    # Linearly interpolate between the color and white
+    return [(1 - amount) * comp + amount for comp in c]
+
 
 def load_trading_states(log_path: str):
     """Load trading states from a JSON log file and convert each dictionary into a TradingState object."""
@@ -131,25 +162,58 @@ def print_self_trade(trade):
         print(f"Bought {trade.quantity} {trade.symbol} at {trade.price}.")
 
 
-def plot_pnl(per_product_pnl_over_time):
+def plot_pnl(per_product_pnl, per_product_quotes=None):
     """
-    Plots the PnL over time for each product on the same axes.
+    Plots the PnL over time for each product using the left y-axis,
+    and overlays resting quotes (if provided) on a secondary y-axis.
+    The resting quotes for each product are drawn in a faded version of the product's assigned color.
     """
-    if not per_product_pnl_over_time:
+    if not per_product_pnl:
         print("No PnL data available to plot.")
         return
 
-    plt.figure(figsize=(10, 6))
-    for product, pnl_data in per_product_pnl_over_time.items():
+    # Create a figure and two y-axes sharing the same x-axis
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+    ax2 = ax1.twinx()
+    
+    # --- Plot resting quotes on the secondary y-axis ---
+    if per_product_quotes:
+        for product, quotes_data in per_product_quotes.items():
+            if quotes_data:
+                # Extract timestamp, bid and ask
+                timestamps, bid_prices, ask_prices = zip(*quotes_data)
+                bid_prices = [price if price is not None else np.nan for price in bid_prices]
+                ask_prices = [price if price is not None else np.nan for price in ask_prices]
+                # Retrieve the product's base color and create a faded version
+                base_color = PRODUCT_COLORS.get(product, "grey")
+                faded_color = lighten_color(base_color, 0.5)
+                # Plot the filled area between bid and ask on ax2
+                ax2.fill_between(timestamps, bid_prices, ask_prices, step='mid',
+                                 color=faded_color, alpha=0.3, label=f"{product} Quotes")
+                # Plot dashed lines for both bid and ask in the same (faded) color
+                ax2.plot(timestamps, bid_prices, linestyle="--", color=faded_color, linewidth=1)
+                ax2.plot(timestamps, ask_prices, linestyle="--", color=faded_color, linewidth=1)
+    # ------------------------------------------------------
+    
+    # --- Plot the PnL data on the primary y-axis ---
+    for product, pnl_data in per_product_pnl.items():
         if pnl_data:
             timestamps, pnl_values = zip(*pnl_data)
-            plt.plot(timestamps, pnl_values, marker="o", markersize=2, label=product)
-    plt.xlabel("Timestamp")
-    plt.ylabel("Profit and Loss")
-    plt.title("PnL Over Time per Product")
-    plt.xticks(rotation=45)
-    plt.legend()
-    plt.tight_layout()
+            prod_color = PRODUCT_COLORS.get(product, None)
+            ax1.plot(timestamps, pnl_values, marker="o", markersize=2, label=product, color=prod_color)
+    
+    ax1.set_xlabel("Timestamp")
+    ax1.set_ylabel("Profit and Loss")
+    ax2.set_ylabel("Resting Quotes Price")
+    ax1.set_title("PnL Over Time per Product")
+    ax1.tick_params(axis="x", rotation=45)
+    
+    # Combine legends from both axes
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, loc="best")
+    
+    fig.tight_layout()
     plt.savefig(f"results/round-{ROUND_NUMBER}/day-{day_number}/pnl_over_time.png")
     if SHOW_PLOT:
         plt.show()
@@ -172,10 +236,12 @@ def main(algo_path=None) -> None:
     market_conditions = []      # list of dicts for market conditions snapshot
     trade_history_list = []     # list of dicts for each trade
     sandbox_logs = []           # list to store sandbox logs
-    # Instead of a single list for aggregated pnl, record pnl per product.
     per_product_pnl = {prod: [] for prod in PRODUCTS}
     
-    # Variables to keep track of trader logs
+    # Create container for quotes if the resting quotes display is enabled.
+    if DISPLAY_RESTING_QUOTES:
+        per_product_quotes = {prod: [] for prod in QUOTES_DISPLAY_PRODUCTS}
+    
     position = {prod: 0 for prod in PRODUCTS}
     traderData = ""
 
@@ -193,16 +259,15 @@ def main(algo_path=None) -> None:
         if LOG_LENGTH and timestamp > LOG_LENGTH * 100:
             break
         
-        # Update the state with newest trader data
         state.position = position
-        state.traderData = traderData  # traderData from previous run
+        state.traderData = traderData
         
         if CONSOLE_PRINT:
             result, conversions, traderData = trader.run(state)
             lambda_log = ""
         else:
             lambda_buffer = io.StringIO()
-            with contextlib.redirect_stdout(lambda_buffer):  # redirect stdout to buffer
+            with contextlib.redirect_stdout(lambda_buffer):
                 result, conversions, traderData = trader.run(state)
             lambda_log = lambda_buffer.getvalue()
         
@@ -223,25 +288,23 @@ def main(algo_path=None) -> None:
                     print(f"[{timestamp}] Position limit exceeded for {product}. Cancelling all orders.")
                 continue
 
-            # Process each order by matching against order depths
             for order in orders_list:
                 trades_executed = []
                 if order.quantity > 0:  # buy order
                     trades_executed = match_buy_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
-                    position[product] = position.get(product, 0) + total_filled  # update trader position
+                    position[product] = position.get(product, 0) + total_filled
                     cash_change = -sum(trade.price * trade.quantity for trade in trades_executed)
-                    trader.cash[product] += cash_change  # update cash
-                    trader.aggregate_cash += cash_change  # update cash
+                    trader.cash[product] += cash_change
+                    trader.aggregate_cash += cash_change
                 elif order.quantity < 0:  # sell order
                     trades_executed = match_sell_order(state, next_state, order)
                     total_filled = sum(trade.quantity for trade in trades_executed)
-                    position[product] = position.get(product, 0) - total_filled  # update trader position
+                    position[product] = position.get(product, 0) - total_filled
                     cash_change = sum(trade.price * trade.quantity for trade in trades_executed)
                     trader.cash[product] += cash_change
-                    trader.aggregate_cash += cash_change  # update cash
+                    trader.aggregate_cash += cash_change
                 
-                # Record each executed trade in trade_history_list
                 for trade in trades_executed:
                     trade_history_list.append({
                         "timestamp": trade.timestamp,
@@ -268,26 +331,17 @@ def main(algo_path=None) -> None:
             trader.pnl[product] += pos * mid_prices[product]
             trader.aggregate_pnl += pos * mid_prices[product]
         
-        # Record pnl for each product over time
         for product in PRODUCTS:
             per_product_pnl[product].append((timestamp, trader.pnl.get(product, 0)))
         
-        if traded and LOG_LENGTH and timestamp < LOG_LENGTH * 100:
-            print(f"[{timestamp}]")
-            for trade in all_trades_executed:
-                print_self_trade(trade)
-            print(f"Positions: {state.position}")
-            print(f"Cash: {trader.aggregate_cash}")
-            print(f"PNL: {trader.aggregate_pnl}\n")
-        
-        # Record market condition snapshot for each product
+        # --- Record resting quotes for specified products ---
         for product in PRODUCTS:
             day = -1
             ts = state.timestamp
             od = state.order_depths.get(product, None)
             if od is not None:
-                bids = sorted(od.buy_orders.items(), key=lambda x: x[0], reverse=True)  # top 3 bids
-                asks = sorted(od.sell_orders.items(), key=lambda x: x[0])  # top 3 asks
+                bids = sorted(od.buy_orders.items(), key=lambda x: x[0], reverse=True)
+                asks = sorted(od.sell_orders.items(), key=lambda x: x[0])
             else:
                 bids = []
                 asks = []
@@ -324,21 +378,36 @@ def main(algo_path=None) -> None:
                 "mid_price": mid_price,
                 "profit_and_loss": trader.aggregate_pnl
             })
+            
+            # If the product is selected for quoting, record its best bid and ask
+            if DISPLAY_RESTING_QUOTES and product in QUOTES_DISPLAY_PRODUCTS:
+                best_bid = bids[0][0] if len(bids) > 0 else None
+                best_ask = asks[0][0] if len(asks) > 0 else None
+                per_product_quotes[product].append((ts, best_bid, best_ask))
+        # ---------------------------------------------------------------------------
+        
+        if traded and LOG_LENGTH and timestamp < LOG_LENGTH * 100:
+            print(f"[{timestamp}]")
+            for trade in all_trades_executed:
+                print_self_trade(trade)
+            print(f"Positions: {state.position}")
+            print(f"Cash: {trader.aggregate_cash}")
+            print(f"PNL: {trader.aggregate_pnl}\n")
     
-    # Export market conditions and trade history to CSV files with semicolon delimiter
-    market_conditions_df = pd.DataFrame(market_conditions)
-    market_conditions_df = market_conditions_df[[
-        "day", "timestamp", "product",
-        "bid_price_1", "bid_volume_1", "bid_price_2", "bid_volume_2", "bid_price_3", "bid_volume_3",
-        "ask_price_1", "ask_volume_1", "ask_price_2", "ask_volume_2", "ask_price_3", "ask_volume_3",
-        "mid_price", "profit_and_loss"
-    ]]
-    market_conditions_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/orderbook.csv", sep=";", index=False)
-    
-    trade_history_df = pd.DataFrame(trade_history_list)
-    if not trade_history_df.empty:
-        trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
-    trade_history_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/trade_history.csv", sep=";", index=False)
+        # CSV export code (orderbook and trade history) remains unchanged...
+        market_conditions_df = pd.DataFrame(market_conditions)
+        market_conditions_df = market_conditions_df[[
+            "day", "timestamp", "product",
+            "bid_price_1", "bid_volume_1", "bid_price_2", "bid_volume_2", "bid_price_3", "bid_volume_3",
+            "ask_price_1", "ask_volume_1", "ask_price_2", "ask_volume_2", "ask_price_3", "ask_volume_3",
+            "mid_price", "profit_and_loss"
+        ]]
+        market_conditions_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/orderbook.csv", sep=";", index=False)
+        
+        trade_history_df = pd.DataFrame(trade_history_list)
+        if not trade_history_df.empty:
+            trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
+        trade_history_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/trade_history.csv", sep=";", index=False)
     
     print("-----------------------------------------------------------------------------------")
     print("TOTAL PNL:", trader.aggregate_pnl)
@@ -349,13 +418,11 @@ def main(algo_path=None) -> None:
     
     combined_logs_path = f"results/round-{ROUND_NUMBER}/day-{day_number}/combined_results.log"
     with open(combined_logs_path, "w") as f:
-        # Sandbox logs section
         f.write("Sandbox logs:\n")
         for log in sandbox_logs:
             f.write(json.dumps(log, indent=2) + "\n")
         f.write("\n")
         
-        # Activities logs section
         f.write("Activities log:\n")
         header = ("day;timestamp;product;bid_price_1;bid_volume_1;bid_price_2;bid_volume_2;"
                   "bid_price_3;bid_volume_3;ask_price_1;ask_volume_1;ask_price_2;ask_volume_2;"
@@ -373,7 +440,6 @@ def main(algo_path=None) -> None:
             f.write(line)
         f.write("\n")
         
-        # Trade history section
         f.write("Trade History:\n")
         f.write(json.dumps(trade_history_list, indent=2))
     
@@ -381,18 +447,19 @@ def main(algo_path=None) -> None:
     with open(pnl_file_path, "w") as f:
         f.write(str(trader.aggregate_pnl))
         
-    # Call the updated plotting function with per-product pnl data.
-    plot_pnl(per_product_pnl)
+    if DISPLAY_RESTING_QUOTES:
+        plot_pnl(per_product_pnl, per_product_quotes)
+    else:
+        plot_pnl(per_product_pnl)
 
 
 if __name__ == "__main__":
-    # Expected optional arguments (in order):
+    # Expected optional arguments:
     #   1. Round number (int between 0 and 5, defaults to 0)
     #   2. Algorithm path (defaults to "algorithms/algo.py")
     #   3. Log length (int, number of timestamps to backtest, defaults to all)
     #   4. Verbose (true/false, 1/0, yes/no; defaults to false)
 
-    # Validate round number
     if len(sys.argv) > 1:
         try:
             day_number = int(sys.argv[1])
@@ -404,14 +471,13 @@ if __name__ == "__main__":
     else:
         day_number = 0
 
-    # Validate algorithm path
     if len(sys.argv) > 2:
         algo_path = sys.argv[2]
         algo_file = Path(algo_path).expanduser().resolve()
         if not algo_file.is_file():
             print(f"Algorithm file not found: {algo_path}")
             sys.exit(1)
-        algo_path = str(algo_file)  # Use resolved path as string
+        algo_path = str(algo_file)
     else:
         algo_path = "algorithms/algo.py"
         default_algo = Path(algo_path).expanduser().resolve()
@@ -419,7 +485,6 @@ if __name__ == "__main__":
             print(f"Default algorithm file not found: {algo_path}")
             sys.exit(1)
 
-    # Validate log length
     if len(sys.argv) > 3:
         try:
             LOG_LENGTH = int(sys.argv[3])
@@ -431,7 +496,6 @@ if __name__ == "__main__":
     else:
         LOG_LENGTH = None
 
-    # Validate verbose flag
     if len(sys.argv) > 4:
         verbose_arg = sys.argv[4].lower()
         valid_verbose = ["true", "false", "1", "0", "yes", "no", "是", "否"]
@@ -442,7 +506,6 @@ if __name__ == "__main__":
     else:
         VERBOSE = False
 
-    # Check that the trading states file exists
     trading_states_file = f"data/round-{ROUND_NUMBER}/day-{day_number}/trading_states.json"
     if not Path(trading_states_file).expanduser().resolve().is_file():
         print(f"Trading states file not found: {trading_states_file}")
