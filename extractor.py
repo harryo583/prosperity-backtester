@@ -115,7 +115,7 @@ for entry in sandbox_json_objects:
                               seller=t.get("seller"),
                               timestamp=int(t.get("timestamp", 0)))
                     )
-
+        
         # Build own_trades with proper int conversion
         own_trades = {}
         for sym, trades in lambda_log.get("own_trades", {}).items():
