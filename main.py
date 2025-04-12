@@ -33,7 +33,6 @@ POSITION_LIMITS = {
     "DJEMBE": 60,
     "PICNIC_BASKET1": 60,
     "PICNIC_BASKET2": 100
-    
 }
 
 def load_trading_states(log_path: str):
