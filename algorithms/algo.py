@@ -183,12 +183,13 @@ class Trader:
 
         return orders
     
+    
     def calculate_resin_price(self, order_depth: OrderDepth) -> float:
         # Midprice strategy for stable product
         best_bid = max(order_depth.buy_orders.keys()) if order_depth.buy_orders else 0
         best_ask = min(order_depth.sell_orders.keys()) if order_depth.sell_orders else 0
         return (best_bid + best_ask) / 2 if best_bid and best_ask else 10
-    
+
 
     def calculate_kelp_price(self, order_depth: OrderDepth, timestamp: int) -> float:
         # EMA strategy with 5-period window
@@ -295,6 +296,9 @@ class Trader:
                 orders.append(Order(KELP, passive_sell_price - 1, -remaining_sell_capacity))
         
         return orders
+    
+    
+    
 
     def run(self, state: TradingState) -> Dict[str, List[Order]]:
         """
