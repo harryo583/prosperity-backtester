@@ -2,6 +2,7 @@
 # main.py
 
 import io
+import os
 import sys
 import json
 import contextlib
@@ -27,14 +28,14 @@ PCB2 = "PICNIC_BASKET2"
 
 CONSOLE_PRINT = True
 POSITION_LIMITS = {
-    "RAINFOREST_RESIN": 50,
-    "KELP": 50,
-    "SQUID_INK": 50,
-    "CROISSANTS": 250,
-    "JAM": 350,
-    "DJEMBE": 60,
-    "PICNIC_BASKET1": 60,
-    "PICNIC_BASKET2": 100
+    RESIN: 50,
+    KELP: 50,
+    SQUID_INK: 50,
+    CROISSANTS: 250,
+    JAMS: 350,
+    DJEMBES: 60,
+    PCB1: 60,
+    PCB2: 100
 }
 
 def load_trading_states(log_path: str):
@@ -338,6 +339,8 @@ def main(algo_path=None) -> None:
     trade_history_df = pd.DataFrame(trade_history_list)
     if not trade_history_df.empty:
         trade_history_df = trade_history_df[["timestamp", "buyer", "seller", "symbol", "currency", "price", "quantity"]]
+    if not os.path.exists(f"results/round-{ROUND_NUMBER}/day-{day_number}"):
+        os.makedirs(f"results/round-{ROUND_NUMBER}/day-{day_number}")
     trade_history_df.to_csv(f"results/round-{ROUND_NUMBER}/day-{day_number}/trade_history.csv", sep=";", index=False)
     
     print("-----------------------------------------------------------------------------------")
