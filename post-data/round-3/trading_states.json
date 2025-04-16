@@ -1,0 +1,2439 @@
+[
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {},
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4264": 56,
+          "4265": 61
+        },
+        "sell_orders": {
+          "4266": -117
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 72
+        },
+        "sell_orders": {
+          "13420": -72
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6518": 125,
+          "6519": 56
+        },
+        "sell_orders": {
+          "6520": -56,
+          "6521": -125
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 28
+        },
+        "sell_orders": {
+          "2047": -27
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58701": 30,
+          "58702": 16
+        },
+        "sell_orders": {
+          "58712": -16,
+          "58713": -30
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30093": 30,
+          "30094": 16
+        },
+        "sell_orders": {
+          "30099": -2,
+          "30100": -44
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 33
+        },
+        "sell_orders": {
+          "10008": -33
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1799": 28
+        },
+        "sell_orders": {
+          "1802": -27
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10217": 61,
+          "10218": 148
+        },
+        "sell_orders": {
+          "10219": -148,
+          "10220": -61
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "233": 16
+        },
+        "sell_orders": {
+          "234": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "63": 16
+        },
+        "sell_orders": {
+          "64": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 16
+        },
+        "sell_orders": {
+          "9": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "718": 16
+        },
+        "sell_orders": {
+          "719": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "469": 16
+        },
+        "sell_orders": {
+          "470": -16
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 0,
+    "traderData": ""
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [
+        {
+          "buyer": "",
+          "price": 4265,
+          "quantity": 8,
+          "seller": "",
+          "symbol": "CROISSANTS",
+          "timestamp": 0
+        }
+      ],
+      "JAMS": [
+        {
+          "buyer": "",
+          "price": 6519,
+          "quantity": 6,
+          "seller": "",
+          "symbol": "JAMS",
+          "timestamp": 0
+        }
+      ]
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4264": 87,
+          "4265": 50
+        },
+        "sell_orders": {
+          "4266": -137
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13418": 37,
+          "13419": 20
+        },
+        "sell_orders": {
+          "13420": -57
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6519": 189
+        },
+        "sell_orders": {
+          "6521": -189
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 33,
+          "2045": 4,
+          "2046": 7
+        },
+        "sell_orders": {
+          "2047": -30
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58703": 20,
+          "58704": 10,
+          "58705": 2
+        },
+        "sell_orders": {
+          "58714": -2,
+          "58715": -10,
+          "58716": -20
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30093": 30,
+          "30094": 2
+        },
+        "sell_orders": {
+          "30099": -12,
+          "30100": -20
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 34
+        },
+        "sell_orders": {
+          "10008": -34
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1800": 33,
+          "1801": 4,
+          "1802": 7
+        },
+        "sell_orders": {
+          "1803": -30
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10216": 57,
+          "10217": 114
+        },
+        "sell_orders": {
+          "10218": -114,
+          "10219": -57
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "234": 12
+        },
+        "sell_orders": {
+          "235": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "62": 12
+        },
+        "sell_orders": {
+          "63": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 12
+        },
+        "sell_orders": {
+          "9": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "717": 12
+        },
+        "sell_orders": {
+          "719": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "468": 12
+        },
+        "sell_orders": {
+          "470": -12
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 100,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "JAMS": [],
+      "KELP": [
+        {
+          "buyer": "",
+          "price": 2046,
+          "quantity": 7,
+          "seller": "",
+          "symbol": "KELP",
+          "timestamp": 100
+        }
+      ],
+      "SQUID_INK": [
+        {
+          "buyer": "",
+          "price": 1802,
+          "quantity": 7,
+          "seller": "",
+          "symbol": "SQUID_INK",
+          "timestamp": 100
+        }
+      ]
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4265": 118
+        },
+        "sell_orders": {
+          "4266": -118
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13418": 42,
+          "13419": 25
+        },
+        "sell_orders": {
+          "13420": -67
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6518": 153,
+          "6519": 75
+        },
+        "sell_orders": {
+          "6520": -75,
+          "6521": -153
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 20
+        },
+        "sell_orders": {
+          "2047": -20
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58709": 25,
+          "58710": 14
+        },
+        "sell_orders": {
+          "58721": -14,
+          "58722": -25
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30091": 25,
+          "30092": 14
+        },
+        "sell_orders": {
+          "30098": -39
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 35
+        },
+        "sell_orders": {
+          "10008": -35
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1801": 20
+        },
+        "sell_orders": {
+          "1804": -20
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10220": 57,
+          "10221": 135
+        },
+        "sell_orders": {
+          "10223": -192
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "235": 14
+        },
+        "sell_orders": {
+          "236": -14
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "64": 14
+        },
+        "sell_orders": {
+          "65": -14
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "9": 14
+        },
+        "sell_orders": {
+          "10": -14
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "722": 14
+        },
+        "sell_orders": {
+          "723": -14
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "473": 14
+        },
+        "sell_orders": {
+          "474": -14
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 200,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "DJEMBES": [
+        {
+          "buyer": "",
+          "price": 13420,
+          "quantity": 2,
+          "seller": "",
+          "symbol": "DJEMBES",
+          "timestamp": 200
+        }
+      ],
+      "JAMS": [],
+      "KELP": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4265": 110
+        },
+        "sell_orders": {
+          "4266": -110
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 64
+        },
+        "sell_orders": {
+          "13420": -64
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6518": 199,
+          "6519": 53
+        },
+        "sell_orders": {
+          "6520": -53,
+          "6521": -199
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 21
+        },
+        "sell_orders": {
+          "2047": -21
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58710": 22,
+          "58711": 19,
+          "58712": 1
+        },
+        "sell_orders": {
+          "58721": -1,
+          "58722": -19,
+          "58723": -22
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30092": 41,
+          "30093": 1
+        },
+        "sell_orders": {
+          "30098": -1,
+          "30099": -41
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 27
+        },
+        "sell_orders": {
+          "10008": -27
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1801": 21
+        },
+        "sell_orders": {
+          "1804": -21
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10222": 181
+        },
+        "sell_orders": {
+          "10224": -138,
+          "10225": -43
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "235": 20
+        },
+        "sell_orders": {
+          "236": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "65": 20
+        },
+        "sell_orders": {
+          "66": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "9": 20
+        },
+        "sell_orders": {
+          "10": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "723": 20
+        },
+        "sell_orders": {
+          "724": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "474": 20
+        },
+        "sell_orders": {
+          "475": -20
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 300,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "DJEMBES": [],
+      "JAMS": [
+        {
+          "buyer": "",
+          "price": 6520,
+          "quantity": 10,
+          "seller": "",
+          "symbol": "JAMS",
+          "timestamp": 300
+        }
+      ],
+      "KELP": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4265": 78,
+          "4266": 47
+        },
+        "sell_orders": {
+          "4267": -125
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 68
+        },
+        "sell_orders": {
+          "13420": -21,
+          "13421": -47
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6518": 189,
+          "6519": 78
+        },
+        "sell_orders": {
+          "6520": -78,
+          "6521": -189
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 38
+        },
+        "sell_orders": {
+          "2047": -30
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58709": 21,
+          "58710": 19
+        },
+        "sell_orders": {
+          "58721": -19,
+          "58722": -21
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30096": 40
+        },
+        "sell_orders": {
+          "30103": -40
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 31
+        },
+        "sell_orders": {
+          "10008": -31
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1800": 38
+        },
+        "sell_orders": {
+          "1803": -30
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10216": 172
+        },
+        "sell_orders": {
+          "10218": -128,
+          "10219": -44
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "234": 19
+        },
+        "sell_orders": {
+          "235": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "62": 19
+        },
+        "sell_orders": {
+          "63": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 19
+        },
+        "sell_orders": {
+          "9": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "717": 19
+        },
+        "sell_orders": {
+          "718": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "468": 19
+        },
+        "sell_orders": {
+          "469": -19
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 400,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [
+        {
+          "buyer": "",
+          "price": 4267,
+          "quantity": 5,
+          "seller": "",
+          "symbol": "CROISSANTS",
+          "timestamp": 400
+        }
+      ],
+      "DJEMBES": [],
+      "JAMS": [],
+      "KELP": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4265": 125
+        },
+        "sell_orders": {
+          "4266": -39,
+          "4267": -86
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 63
+        },
+        "sell_orders": {
+          "13420": -27,
+          "13421": -36
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6518": 286
+        },
+        "sell_orders": {
+          "6520": -286
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 29,
+          "2045": 6
+        },
+        "sell_orders": {
+          "2047": -22
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58709": 27,
+          "58710": 16
+        },
+        "sell_orders": {
+          "58721": -16,
+          "58722": -27
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30097": 43
+        },
+        "sell_orders": {
+          "30103": -16,
+          "30104": -27
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 34
+        },
+        "sell_orders": {
+          "10008": -34
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1801": 29,
+          "1802": 6
+        },
+        "sell_orders": {
+          "1804": -22
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10215": 63,
+          "10216": 143
+        },
+        "sell_orders": {
+          "10217": -143,
+          "10218": -63
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "229": 16
+        },
+        "sell_orders": {
+          "230": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "62": 16
+        },
+        "sell_orders": {
+          "63": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 16
+        },
+        "sell_orders": {
+          "9": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "716": 16
+        },
+        "sell_orders": {
+          "718": -16
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "468": 16
+        },
+        "sell_orders": {
+          "469": -16
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 500,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "DJEMBES": [],
+      "JAMS": [],
+      "KELP": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4264": 129
+        },
+        "sell_orders": {
+          "4266": -129
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 55
+        },
+        "sell_orders": {
+          "13420": -55
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6518": 256
+        },
+        "sell_orders": {
+          "6520": -256
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 29
+        },
+        "sell_orders": {
+          "2047": -29
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58700": 21,
+          "58701": 20,
+          "58706": 4
+        },
+        "sell_orders": {
+          "58712": -20,
+          "58713": -21
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30095": 41,
+          "30098": 4
+        },
+        "sell_orders": {
+          "30101": -20,
+          "30102": -21
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 30
+        },
+        "sell_orders": {
+          "10008": -30
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1802": 29
+        },
+        "sell_orders": {
+          "1805": -29
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10214": 192
+        },
+        "sell_orders": {
+          "10216": -133,
+          "10217": -59
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "228": 20
+        },
+        "sell_orders": {
+          "230": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "62": 20
+        },
+        "sell_orders": {
+          "63": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 20
+        },
+        "sell_orders": {
+          "9": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "715": 20
+        },
+        "sell_orders": {
+          "716": -20
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "466": 20
+        },
+        "sell_orders": {
+          "467": -20
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 600,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "DJEMBES": [],
+      "JAMS": [],
+      "KELP": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4264": 63,
+          "4265": 57
+        },
+        "sell_orders": {
+          "4266": -120
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 59
+        },
+        "sell_orders": {
+          "13421": -59
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6519": 261
+        },
+        "sell_orders": {
+          "6521": -261
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2044": 30,
+          "2045": 4
+        },
+        "sell_orders": {
+          "2047": -30
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58705": 29,
+          "58706": 18,
+          "58707": 1
+        },
+        "sell_orders": {
+          "58716": -1,
+          "58717": -18,
+          "58718": -29
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30097": 47,
+          "30098": 1
+        },
+        "sell_orders": {
+          "30103": -19,
+          "30104": -29
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 30
+        },
+        "sell_orders": {
+          "10008": -30
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1802": 29,
+          "1803": 5
+        },
+        "sell_orders": {
+          "1805": -1,
+          "1806": -29
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10218": 66,
+          "10219": 128
+        },
+        "sell_orders": {
+          "10220": -128,
+          "10221": -66
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "232": 19
+        },
+        "sell_orders": {
+          "233": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "63": 19
+        },
+        "sell_orders": {
+          "64": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 19
+        },
+        "sell_orders": {
+          "9": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "719": 19
+        },
+        "sell_orders": {
+          "720": -19
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "470": 19
+        },
+        "sell_orders": {
+          "471": -19
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 700,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "DJEMBES": [],
+      "JAMS": [],
+      "KELP": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4265": 93
+        },
+        "sell_orders": {
+          "4266": -42,
+          "4267": -51
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13419": 57
+        },
+        "sell_orders": {
+          "13421": -57
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6519": 225
+        },
+        "sell_orders": {
+          "6521": -225
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2043": 28
+        },
+        "sell_orders": {
+          "2044": -1,
+          "2047": -28
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58708": 20,
+          "58709": 10,
+          "58710": 1
+        },
+        "sell_orders": {
+          "58719": -1,
+          "58720": -10,
+          "58721": -20
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30099": 30,
+          "30100": 1
+        },
+        "sell_orders": {
+          "30105": -11,
+          "30106": -20
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 27
+        },
+        "sell_orders": {
+          "10008": -27
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1804": 28
+        },
+        "sell_orders": {
+          "1805": -1,
+          "1807": -28
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10220": 176,
+          "10221": 5
+        },
+        "sell_orders": {
+          "10222": -129,
+          "10223": -47
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "235": 11
+        },
+        "sell_orders": {
+          "236": -11
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "64": 11
+        },
+        "sell_orders": {
+          "65": -11
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 11
+        },
+        "sell_orders": {
+          "9": -11
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "721": 11
+        },
+        "sell_orders": {
+          "722": -11
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "472": 11
+        },
+        "sell_orders": {
+          "473": -11
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 800,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [
+        {
+          "buyer": "",
+          "price": 4266,
+          "quantity": 5,
+          "seller": "",
+          "symbol": "CROISSANTS",
+          "timestamp": 800
+        }
+      ],
+      "DJEMBES": [],
+      "JAMS": [],
+      "KELP": [
+        {
+          "buyer": "",
+          "price": 2044,
+          "quantity": 1,
+          "seller": "",
+          "symbol": "KELP",
+          "timestamp": 800
+        },
+        {
+          "buyer": "",
+          "price": 2044,
+          "quantity": 1,
+          "seller": "",
+          "symbol": "KELP",
+          "timestamp": 800
+        }
+      ],
+      "SQUID_INK": [
+        {
+          "buyer": "",
+          "price": 1805,
+          "quantity": 1,
+          "seller": "",
+          "symbol": "SQUID_INK",
+          "timestamp": 800
+        },
+        {
+          "buyer": "",
+          "price": 1805,
+          "quantity": 1,
+          "seller": "",
+          "symbol": "SQUID_INK",
+          "timestamp": 800
+        }
+      ]
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4265": 109
+        },
+        "sell_orders": {
+          "4266": -109
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13418": 49
+        },
+        "sell_orders": {
+          "13420": -49
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6519": 222
+        },
+        "sell_orders": {
+          "6521": -222
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2043": 25
+        },
+        "sell_orders": {
+          "2047": -25
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58706": 19,
+          "58707": 18
+        },
+        "sell_orders": {
+          "58717": -1,
+          "58718": -36
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30095": 36,
+          "30096": 1
+        },
+        "sell_orders": {
+          "30101": -18,
+          "30102": -19
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 32
+        },
+        "sell_orders": {
+          "10008": -32
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1803": 25
+        },
+        "sell_orders": {
+          "1806": -25
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10216": 54,
+          "10217": 125
+        },
+        "sell_orders": {
+          "10218": -125,
+          "10219": -54
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "231": 18
+        },
+        "sell_orders": {
+          "232": -18
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "62": 18
+        },
+        "sell_orders": {
+          "63": -18
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 18
+        },
+        "sell_orders": {
+          "9": -18
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "717": 18
+        },
+        "sell_orders": {
+          "718": -18
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "469": 18
+        },
+        "sell_orders": {
+          "470": -18
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 900,
+    "traderData": "SAMPLE"
+  },
+  {
+    "listings": {
+      "CROISSANTS": {
+        "denomination": 1,
+        "product": "CROISSANTS",
+        "symbol": "CROISSANTS"
+      },
+      "DJEMBES": {
+        "denomination": 1,
+        "product": "DJEMBES",
+        "symbol": "DJEMBES"
+      },
+      "JAMS": {
+        "denomination": 1,
+        "product": "JAMS",
+        "symbol": "JAMS"
+      },
+      "KELP": {
+        "denomination": 1,
+        "product": "KELP",
+        "symbol": "KELP"
+      },
+      "PICNIC_BASKET1": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET1",
+        "symbol": "PICNIC_BASKET1"
+      },
+      "PICNIC_BASKET2": {
+        "denomination": 1,
+        "product": "PICNIC_BASKET2",
+        "symbol": "PICNIC_BASKET2"
+      },
+      "RAINFOREST_RESIN": {
+        "denomination": 1,
+        "product": "RAINFOREST_RESIN",
+        "symbol": "RAINFOREST_RESIN"
+      },
+      "SQUID_INK": {
+        "denomination": 1,
+        "product": "SQUID_INK",
+        "symbol": "SQUID_INK"
+      },
+      "VOLCANIC_ROCK": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK",
+        "symbol": "VOLCANIC_ROCK"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10000",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10000"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10250",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10250"
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_10500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_10500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9500",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9500"
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "denomination": 1,
+        "product": "VOLCANIC_ROCK_VOUCHER_9750",
+        "symbol": "VOLCANIC_ROCK_VOUCHER_9750"
+      }
+    },
+    "market_trades": {
+      "CROISSANTS": [],
+      "DJEMBES": [],
+      "JAMS": [
+        {
+          "buyer": "",
+          "price": 6521,
+          "quantity": 9,
+          "seller": "",
+          "symbol": "JAMS",
+          "timestamp": 900
+        }
+      ],
+      "KELP": [],
+      "PICNIC_BASKET1": [],
+      "SQUID_INK": []
+    },
+    "observations": {
+      "conversionObservations": {},
+      "plainValueObservations": {}
+    },
+    "order_depths": {
+      "CROISSANTS": {
+        "buy_orders": {
+          "4266": 116
+        },
+        "sell_orders": {
+          "4267": -63,
+          "4268": -53
+        }
+      },
+      "DJEMBES": {
+        "buy_orders": {
+          "13418": 61
+        },
+        "sell_orders": {
+          "13419": -22,
+          "13420": -39
+        }
+      },
+      "JAMS": {
+        "buy_orders": {
+          "6520": 241
+        },
+        "sell_orders": {
+          "6522": -241
+        }
+      },
+      "KELP": {
+        "buy_orders": {
+          "2043": 22
+        },
+        "sell_orders": {
+          "2047": -22
+        }
+      },
+      "PICNIC_BASKET1": {
+        "buy_orders": {
+          "58718": 22,
+          "58719": 5
+        },
+        "sell_orders": {
+          "58730": -12,
+          "58731": -22
+        }
+      },
+      "PICNIC_BASKET2": {
+        "buy_orders": {
+          "30104": 34
+        },
+        "sell_orders": {
+          "30105": -7,
+          "30111": -34
+        }
+      },
+      "RAINFOREST_RESIN": {
+        "buy_orders": {
+          "9992": 33
+        },
+        "sell_orders": {
+          "9998": -3,
+          "10003": -7,
+          "10008": -33
+        }
+      },
+      "SQUID_INK": {
+        "buy_orders": {
+          "1804": 22
+        },
+        "sell_orders": {
+          "1807": -22
+        }
+      },
+      "VOLCANIC_ROCK": {
+        "buy_orders": {
+          "10215": 68,
+          "10216": 126
+        },
+        "sell_orders": {
+          "10218": -194
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10000": {
+        "buy_orders": {
+          "230": 12
+        },
+        "sell_orders": {
+          "231": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10250": {
+        "buy_orders": {
+          "62": 12
+        },
+        "sell_orders": {
+          "63": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_10500": {
+        "buy_orders": {
+          "8": 12
+        },
+        "sell_orders": {
+          "9": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9500": {
+        "buy_orders": {
+          "717": 12
+        },
+        "sell_orders": {
+          "718": -12
+        }
+      },
+      "VOLCANIC_ROCK_VOUCHER_9750": {
+        "buy_orders": {
+          "468": 12
+        },
+        "sell_orders": {
+          "469": -12
+        }
+      }
+    },
+    "own_trades": {},
+    "position": {},
+    "timestamp": 1000,
+    "traderData": "SAMPLE"
+  }
+]

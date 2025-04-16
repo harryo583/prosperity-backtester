@@ -9,7 +9,7 @@ PRINT_TRADING_STATES = True
 PRINT_ACTIVITY_LOGS = True
 PRINT_TRADE_HISTORY = True
 
-ROUND_NUMBER = 2
+ROUND_NUMBER = 3
 
 ########################################################################
 # Parse Data

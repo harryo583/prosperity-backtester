@@ -203,15 +203,19 @@ def main(algo_path=None) -> None:
         
         mid_prices = {}
         for product in state.listings:
-            mid_prices[product] = (min(state.order_depths[product].sell_orders.keys()) +
-                                   max(state.order_depths[product].buy_orders.keys())) // 2
+            if not state.order_depths[product].buy_orders.keys() or \
+                not state.order_depths[product].sell_orders.keys():
+                    mid_prices[product] = -1
+            else:
+                mid_prices[product] = (min(state.order_depths[product].sell_orders.keys()) + \
+                    max(state.order_depths[product].buy_orders.keys())) // 2
         
         if LOG_LENGTH and timestamp > LOG_LENGTH * 100:
             break
         
         # Update the state with newest trader data
         state.position = position
-        state.traderData = traderData  # traderData from previous run
+        state.traderData = traderData # traderData from previous run
         
         if CONSOLE_PRINT:
             result, conversions, traderData = trader.run(state)
