@@ -17,6 +17,19 @@
 - **results/**: stores backtesting results - an orderbook CSV, a PNL vs time plot, and a trade history CSV.
 - **algorithms/**: directory for storing your algorithms to backtest.
 
+
+## Backtest Output
+
+The backtest output is stored in the `results/round-x` directory and includes the following three files:
+
+1. **`combined_results.log`** – A log file that exactly replicates the format of official logs.
+2. **`orderbook.csv`** – A CSV file containing the order book and PnL at every timestamp.
+![Orderbook Example](assets/example-orderbook)
+3. **`pnl_over_time.png`** – A plot of PnL over time.
+![PnL Over Time Example](assets/example-plot)
+4. **`trade_history.csv`** – A CSV file containing the history of all of *your own* trades.
+
+
 ## How to Use
 
 To run the backtester from the command line, run the command `python main.py` followed by the following command-line arguments *in order*. If one or more arguments are missing, the flags are interpreted based on their positions and the remaining parameters are set to default values. If no arguments are provided, it defaults to testing `algorithms/algo.py` on round 0 data. For meaningful results, the first two arguments (round number and algorithm path) are usually needed.
@@ -49,11 +62,3 @@ python main.py 3 algorithms/猴子吃香蕉.py 314 1
 
 python main.py 5 algorithms/啦啦啦啦啦.py 100 否
 ```
-
-## Backtest Output
-
-The backtest output is stored in the `results/round-x` directory and includes the following three files:
-
-1. **`orderbook.csv`** – A CSV file containing the order book and PnL at every timestamp.
-2. **`pnl_over_time.png`** – A plot of PnL over time.
-3. **`trade_history.csv`** – A CSV file containing the history of all of *your own* trades.
