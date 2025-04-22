@@ -5,8 +5,8 @@ import pandas as pd
 from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, ConversionObservation
 
 PRINT_TRADING_STATES = False
-ROUND_NUMBER = 3
-DAY_NUMBER = 2
+ROUND_NUMBER = 5
+DAY_NUMBER = 0
 
 ########################################################################
 # Read CSV Files
