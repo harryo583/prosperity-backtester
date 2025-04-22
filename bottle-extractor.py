@@ -6,7 +6,7 @@ from datamodel import TradingState, Listing, OrderDepth, Trade, Observation, Con
 
 PRINT_TRADING_STATES = False
 ROUND_NUMBER = 5
-DAY_NUMBER = 0
+DAY_NUMBER = 2
 
 ########################################################################
 # Read CSV Files
