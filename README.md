@@ -23,10 +23,10 @@
 The backtest output is stored in the `results/round-x` directory and includes the following three files:
 
 1. **`combined_results.log`** – A log file that exactly replicates the format of official logs.
-2. **`orderbook.csv`** – A CSV file containing the order book and PnL at every timestamp.
-![Orderbook Example](assets/example-orderbook.png)
-3. **`pnl_over_time.png`** – A plot of PnL over time.
+2. **`pnl_over_time.png`** – A plot of PnL over time.
 ![PnL Over Time Example](assets/example-plot.png)
+3. **`orderbook.csv`** – A CSV file containing the order book and PnL at every timestamp.
+![Orderbook Example](assets/example-orderbook.png)
 4. **`trade_history.csv`** – A CSV file containing the history of all of *your own* trades.
 
 
